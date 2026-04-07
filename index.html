@@ -1,244 +1,409 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Browser Video Editor</title>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browser Video Editor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-    <style>
-      /* 這裡你可以先貼原本 style.css 的內容；先放簡化骨架 */
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        background-color: #f5f5f5;
-        color: #333;
-        line-height: 1.6;
-      }
-      .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-      header { text-align: center; margin-bottom: 40px; }
-      header h1 { font-size: 2.2rem; color: #2c3e50; margin-bottom: 10px; }
-      header p { font-size: 1rem; color: #7f8c8d; }
+  <style>
+    :root {
+      --color-bg: #f7f6f2;
+      --color-surface: #ffffff;
+      --color-surface-2: #f3f0ec;
+      --color-border: #dcd9d5;
+      --color-text: #28251d;
+      --color-text-muted: #7a7974;
+      --color-primary: #01696f;
+      --color-primary-hover: #0c4e54;
+      --color-success: #437a22;
+      --color-success-hover: #2e5c10;
+      --color-error: #a12c7b;
+      --radius-sm: 0.375rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+      --space-2: 0.5rem;
+      --space-3: 0.75rem;
+      --space-4: 1rem;
+      --space-6: 1.5rem;
+      --space-8: 2rem;
+      --space-10: 2.5rem;
+      --space-12: 3rem;
+      --shadow-sm: 0 1px 2px oklch(0.2 0.01 80 / 0.06);
+      --shadow-md: 0 4px 12px oklch(0.2 0.01 80 / 0.08);
+      --shadow-lg: 0 12px 32px oklch(0.2 0.01 80 / 0.12);
+      --transition: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+    }
 
-      .upload-section { margin-bottom: 40px; }
-      .upload-area {
-        border: 2px dashed #3498db;
-        border-radius: 10px;
-        padding: 60px;
-        text-align: center;
-        background-color: #fff;
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
-      .upload-area:hover {
-        border-color: #2980b9;
-        background-color: #f8f9fa;
-      }
-      .upload-area.dragover {
-        border-color: #27ae60;
-        background-color: #e8f5e9;
-      }
-      .upload-area svg { color: #3498db; margin-bottom: 20px; }
-      .upload-area p { font-size: 1.05rem; color: #7f8c8d; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-      .editor-section,
-      .output-section {
-        background-color: #fff;
-        border-radius: 10px;
-        padding: 30px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        margin-bottom: 30px;
-      }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--color-bg);
+      color: var(--color-text);
+      min-height: 100dvh;
+      line-height: 1.6;
+      font-size: 1rem;
+    }
 
-      .video-preview video {
-        width: 100%;
-        max-height: 480px;
-        border-radius: 8px;
-        background-color: #000;
-      }
+    .container { max-width: 960px; margin: 0 auto; padding: var(--space-8) var(--space-4); }
 
-      .video-info {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 10px;
-        padding: 8px 12px;
-        background-color: #f8f9fa;
-        border-radius: 5px;
-        font-size: 0.9rem;
-      }
+    header {
+      text-align: center;
+      margin-bottom: var(--space-10);
+    }
+    header h1 {
+      font-size: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: var(--space-2);
+      letter-spacing: -0.02em;
+    }
+    header p { color: var(--color-text-muted); font-size: 0.95rem; }
 
-      .controls-section {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 24px;
-        margin-top: 24px;
-      }
+    .upload-section { margin-bottom: var(--space-6); }
+    .upload-area {
+      border: 2px dashed var(--color-border);
+      border-radius: var(--radius-xl);
+      padding: clamp(var(--space-8), 6vw, var(--space-12));
+      text-align: center;
+      background: var(--color-surface);
+      cursor: pointer;
+      transition: border-color var(--transition), background var(--transition);
+    }
+    .upload-area:hover { border-color: var(--color-primary); background: #f0f9f9; }
+    .upload-area.dragover { border-color: var(--color-success); background: #f0f7ec; }
+    .upload-area svg { color: var(--color-primary); margin: 0 auto var(--space-4); display: block; }
+    .upload-area p { color: var(--color-text-muted); font-size: 0.95rem; }
 
-      .controls-section > div {
-        padding: 16px;
-        background-color: #f8f9fa;
-        border-radius: 8px;
-      }
+    .upload-status { text-align: center; margin-top: var(--space-4); min-height: 1.5rem; }
+    #ffmpegStatus { font-size: 0.875rem; color: var(--color-text-muted); }
 
-      label { font-size: 0.9rem; color: #555; display: block; margin-bottom: 4px; }
-      input[type="number"] {
-        width: 100%;
-        padding: 6px 8px;
-        border-radius: 4px;
-        border: 1px solid #ccc;
-        font-size: 0.95rem;
-      }
+    .editor-section, .output-section {
+      background: var(--color-surface);
+      border-radius: var(--radius-xl);
+      padding: var(--space-8);
+      box-shadow: var(--shadow-md);
+      margin-bottom: var(--space-6);
+    }
 
-      .btn {
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        font-size: 0.95rem;
-        cursor: pointer;
-        margin-right: 8px;
-      }
-      .btn-primary { background-color: #3498db; color: #fff; }
-      .btn-success { background-color: #27ae60; color: #fff; }
-      .btn-secondary { background-color: #95a5a6; color: #fff; }
+    video {
+      width: 100%;
+      max-height: 480px;
+      border-radius: var(--radius-lg);
+      background: #000;
+      display: block;
+    }
 
-      .modal {
-        position: fixed;
-        inset: 0;
-        background-color: rgba(0,0,0,0.5);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 1000;
-      }
-      .modal-content {
-        background-color: #fff;
-        padding: 32px 40px;
-        border-radius: 10px;
-        text-align: center;
-        min-width: 320px;
-      }
-      .progress-bar {
-        width: 100%;
-        height: 18px;
-        background-color: #e0e0e0;
-        border-radius: 10px;
-        overflow: hidden;
-        margin-top: 12px;
-      }
-      .progress-bar-fill {
-        height: 100%;
-        background-color: #3498db;
-        width: 0%;
-        transition: width 0.3s ease;
-      }
+    .video-info {
+      display: flex;
+      justify-content: space-between;
+      margin-top: var(--space-3);
+      padding: var(--space-2) var(--space-3);
+      background: var(--color-surface-2);
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      color: var(--color-text-muted);
+    }
 
-      footer {
-        text-align: center;
-        margin-top: 40px;
-        padding: 16px;
-        color: #7f8c8d;
-        font-size: 0.85rem;
-      }
+    .controls-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: var(--space-4);
+      margin-top: var(--space-6);
+    }
 
-      @media (max-width: 768px) {
-        .upload-area { padding: 40px 20px; }
-      }
-    </style>
+    .control-card {
+      background: var(--color-surface-2);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+    }
+    .control-card h3 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: var(--space-3);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
 
-    <!-- FFmpeg WASM CDN -->
-    <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
-    <script src="https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js"></script>
-  </head>
+    label { font-size: 0.875rem; color: var(--color-text-muted); display: block; margin-bottom: var(--space-2); }
 
-  <body>
-    <div class="container">
-      <header>
-        <h1>Browser Video Editor</h1>
-        <p>Edit videos directly in your browser using FFmpeg WASM</p>
-      </header>
+    input[type="number"], select {
+      width: 100%;
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border);
+      background: var(--color-surface);
+      font-size: 0.875rem;
+      color: var(--color-text);
+      transition: border-color var(--transition);
+    }
+    input[type="number"]:focus, select:focus {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+      border-color: var(--color-primary);
+    }
 
-      <div class="upload-section">
-        <div class="upload-area" id="uploadArea">
-          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48"
-               viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="17 8 12 3 7 8"></polyline>
-            <line x1="12" y1="3" x2="12" y2="15"></line>
-          </svg>
-          <p>Drag & drop your video here or click to browse</p>
-          <input type="file" id="videoInput" accept="video/*" hidden>
-        </div>
-        <div style="text-align:center; margin-top: 16px;">
-          <p id="ffmpegStatus" style="color:#7f8c8d; font-size:0.9rem;">
-            Initializing video processor... (first load may take 10–30 seconds)
-          </p>
-        </div>
-      </div>
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--color-primary);
+      margin-top: var(--space-2);
+    }
 
-      <div id="editorSection" class="editor-section" style="display:none;">
-        <div class="video-preview">
-          <video id="videoPlayer" controls></video>
-          <div class="video-info">
-            <span id="videoName"></span>
-            <span id="videoDuration"></span>
-          </div>
-        </div>
+    .trim-row { display: flex; gap: var(--space-3); }
+    .trim-row > div { flex: 1; }
 
-        <div class="controls-section">
-          <div class="trim-controls">
-            <h3>Trim Video</h3>
-            <div style="display:flex; gap:16px; margin-top:8px;">
-              <div style="flex:1;">
-                <label>Start (s)</label>
-                <input type="number" id="startTime" min="0" step="0.1" value="0">
-              </div>
-              <div style="flex:1;">
-                <label>End (s)</label>
-                <input type="number" id="endTime" min="0" step="0.1">
-              </div>
-            </div>
-            <div style="margin-top:12px;">
-              <button id="trimBtn" class="btn btn-primary">Apply Trim</button>
-            </div>
-          </div>
-        </div>
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-4);
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background var(--transition), opacity var(--transition);
+    }
+    .btn-primary { background: var(--color-primary); color: #fff; }
+    .btn-primary:hover { background: var(--color-primary-hover); }
+    .btn-success { background: var(--color-success); color: #fff; }
+    .btn-success:hover { background: var(--color-success-hover); }
+    .btn-secondary {
+      background: var(--color-surface-2);
+      color: var(--color-text-muted);
+      border: 1px solid var(--color-border);
+    }
+    .btn-secondary:hover { background: var(--color-border); }
+    .btn:active { opacity: 0.85; }
 
-        <div style="text-align:center; margin-top:24px;">
-          <button id="exportBtn" class="btn btn-success" style="padding:12px 36px;">
-            Export Video
-          </button>
-          <button id="resetBtn" class="btn btn-secondary">
-            Reset
-          </button>
-        </div>
-      </div>
+    .control-card .btn { margin-top: var(--space-3); width: 100%; }
 
-      <div id="processingModal" class="modal" style="display:none;">
-        <div class="modal-content">
-          <h3>Processing Video...</h3>
-          <div class="progress-bar">
-            <div id="progressBarFill" class="progress-bar-fill"></div>
-          </div>
-          <p id="progressText" style="margin-top:8px;">Initializing...</p>
-        </div>
-      </div>
+    .effects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); }
+    .effect-btn {
+      padding: var(--space-2) var(--space-3);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      background: var(--color-surface);
+      color: var(--color-text-muted);
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: background var(--transition), color var(--transition), border-color var(--transition);
+    }
+    .effect-btn:hover { border-color: var(--color-primary); color: var(--color-primary); }
+    .effect-btn.active { background: var(--color-primary); color: #fff; border-color: var(--color-primary); }
 
-      <div id="outputSection" class="output-section" style="display:none;">
-        <h3>Processed Video</h3>
-        <video id="outputVideo" controls></video>
-        <div style="text-align:center; margin-top:16px;">
-          <button id="downloadBtn" class="btn btn-success">Download Video</button>
-          <button id="newVideoBtn" class="btn btn-primary">Edit Another Video</button>
-        </div>
-      </div>
+    .export-bar {
+      display: flex;
+      gap: var(--space-3);
+      justify-content: center;
+      margin-top: var(--space-6);
+      flex-wrap: wrap;
+    }
+    .export-bar .btn-success { padding: var(--space-3) var(--space-8); font-size: 1rem; }
 
-      <footer>
-        <p>Powered by FFmpeg WASM • All processing happens in your browser</p>
-      </footer>
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: oklch(0.2 0.01 80 / 0.5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal-content {
+      background: var(--color-surface);
+      padding: var(--space-8) var(--space-10);
+      border-radius: var(--radius-xl);
+      text-align: center;
+      min-width: 320px;
+      box-shadow: var(--shadow-lg);
+    }
+    .modal-content h3 { font-size: 1rem; font-weight: 600; margin-bottom: var(--space-4); }
+    .progress-bar {
+      width: 100%;
+      height: 8px;
+      background: var(--color-surface-2);
+      border-radius: 9999px;
+      overflow: hidden;
+      margin-bottom: var(--space-3);
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--color-primary);
+      width: 0%;
+      transition: width 0.3s ease;
+      border-radius: 9999px;
+    }
+    #progressText { font-size: 0.875rem; color: var(--color-text-muted); }
+
+    .output-section h3 { font-size: 1rem; font-weight: 600; margin-bottom: var(--space-4); }
+    .output-section .export-bar { margin-top: var(--space-4); }
+
+    .notification {
+      position: fixed;
+      top: var(--space-4);
+      right: var(--space-4);
+      padding: var(--space-3) var(--space-6);
+      border-radius: var(--radius-md);
+      color: #fff;
+      font-size: 0.875rem;
+      font-weight: 500;
+      z-index: 2000;
+      box-shadow: var(--shadow-md);
+      animation: slideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    .notification.success { background: var(--color-success); }
+    .notification.error { background: var(--color-error); }
+
+    @keyframes slideIn {
+      from { transform: translateX(calc(100% + 1rem)); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(calc(100% + 1rem)); opacity: 0; }
+    }
+
+    footer {
+      text-align: center;
+      margin-top: var(--space-12);
+      padding: var(--space-6);
+      color: var(--color-text-muted);
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 600px) {
+      .controls-section { grid-template-columns: 1fr; }
+      .modal-content { min-width: auto; margin: var(--space-4); }
+    }
+  </style>
+
+  <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>Browser Video Editor</h1>
+    <p>Edit, trim, resize and export videos — entirely in your browser</p>
+  </header>
+
+  <div id="uploadSection">
+    <div class="upload-area" id="uploadArea">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"
+           fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+        <polyline points="17 8 12 3 7 8"/>
+        <line x1="12" y1="3" x2="12" y2="15"/>
+      </svg>
+      <p>Drag &amp; drop a video here, or click to browse</p>
+      <input type="file" id="videoInput" accept="video/*" hidden>
+    </div>
+    <div class="upload-status">
+      <p id="ffmpegStatus">Initializing video processor… (first load may take 10–30 s)</p>
+    </div>
+  </div>
+
+  <div id="editorSection" class="editor-section" style="display:none;">
+    <video id="videoPlayer" controls></video>
+    <div class="video-info">
+      <span id="videoName"></span>
+      <span id="videoDuration"></span>
     </div>
 
-    <script>
- // Global variables
+    <div class="controls-section">
+      <div class="control-card">
+        <h3>Trim</h3>
+        <div class="trim-row">
+          <div>
+            <label for="startTime">Start (s)</label>
+            <input type="number" id="startTime" min="0" step="0.1" value="0">
+          </div>
+          <div>
+            <label for="endTime">End (s)</label>
+            <input type="number" id="endTime" min="0" step="0.1">
+          </div>
+        </div>
+        <button id="trimBtn" class="btn btn-primary">Apply Trim</button>
+      </div>
+
+      <div class="control-card">
+        <h3>Resize</h3>
+        <label for="resizeSelect">Resolution</label>
+        <select id="resizeSelect">
+          <option value="">Original</option>
+          <option value="1920x1080">1080p</option>
+          <option value="1280x720">720p</option>
+          <option value="854x480">480p</option>
+          <option value="640x360">360p</option>
+        </select>
+        <button id="resizeBtn" class="btn btn-primary">Apply Resize</button>
+      </div>
+
+      <div class="control-card">
+        <h3>Format</h3>
+        <label for="formatSelect">Output format</label>
+        <select id="formatSelect">
+          <option value="mp4" selected>MP4</option>
+          <option value="webm">WebM</option>
+          <option value="mov">MOV</option>
+          <option value="avi">AVI</option>
+          <option value="gif">GIF</option>
+        </select>
+        <button id="convertBtn" class="btn btn-primary">Set Format</button>
+      </div>
+
+      <div class="control-card">
+        <h3>Audio</h3>
+        <label for="volumeSlider">Volume: <span id="volumeValue">100%</span></label>
+        <input type="range" id="volumeSlider" min="0" max="200" value="100">
+        <button id="muteBtn" class="btn btn-secondary">Remove Audio</button>
+      </div>
+
+      <div class="control-card">
+        <h3>Effects</h3>
+        <div class="effects-grid">
+          <button class="effect-btn" data-effect="grayscale">Grayscale</button>
+          <button class="effect-btn" data-effect="blur">Blur</button>
+          <button class="effect-btn" data-effect="sharpen">Sharpen</button>
+          <button class="effect-btn" data-effect="vintage">Vintage</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="export-bar">
+      <button id="exportBtn" class="btn btn-success">Export Video</button>
+      <button id="resetBtn" class="btn btn-secondary">Reset All</button>
+    </div>
+  </div>
+
+  <div id="processingModal" class="modal" style="display:none;">
+    <div class="modal-content">
+      <h3>Processing Video…</h3>
+      <div class="progress-bar"><div id="progressBarFill" class="progress-bar-fill"></div></div>
+      <p id="progressText">Initializing…</p>
+    </div>
+  </div>
+
+  <div id="outputSection" class="output-section" style="display:none;">
+    <h3>Processed Video</h3>
+    <video id="outputVideo" controls></video>
+    <div class="export-bar">
+      <button id="downloadBtn" class="btn btn-success">Download</button>
+      <button id="newVideoBtn" class="btn btn-primary">Edit Another</button>
+    </div>
+  </div>
+
+  <footer>Powered by FFmpeg WASM · All processing happens in your browser</footer>
+</div>
+
+<script>
 const { createFFmpeg, fetchFile } = FFmpeg;
 let ffmpeg = null;
 let ffmpegLoaded = false;
@@ -246,75 +411,57 @@ let currentVideoFile = null;
 let currentVideoURL = null;
 let processedVideoURL = null;
 let videoOperations = {
-    trim: null,
-    effect: null,
-    resize: null,
-    format: 'mp4',
-    mute: false,
-    volume: 100
+  trim: null,
+  effect: null,
+  resize: null,
+  format: 'mp4',
+  mute: false,
+  volume: 100
 };
 
-// Initialize FFmpeg with proper error handling
 async function initFFmpeg() {
-    if (!ffmpeg) {
-        try {
-            // Create FFmpeg instance
-            ffmpeg = createFFmpeg({
-                log: true,
-                corePath: 'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js',
-            });
-            
-            // Load FFmpeg
-            if (!ffmpeg.isLoaded()) {
-                await ffmpeg.load();
-                ffmpegLoaded = true;
-                console.log('FFmpeg loaded successfully');
-            }
-        } catch (error) {
-            console.error('Failed to load FFmpeg:', error);
-            throw error;
-        }
-    }
-    
-    return ffmpeg;
-}
-
-// Auto-load FFmpeg on page load
-async function autoLoadFFmpeg() {
-    const status = document.getElementById('ffmpegStatus');
-    
+  if (!ffmpeg) {
     try {
-        status.textContent = 'Loading video processor... This may take a moment on first visit.';
-        status.style.color = '#3498db';
-        
-        await initFFmpeg();
-        
-        status.textContent = 'Video processor ready! You can now upload and edit videos.';
-        status.style.color = '#27ae60';
-        
-        // Enable upload area
-        uploadArea.style.opacity = '1';
-        uploadArea.style.pointerEvents = 'auto';
-        
+      ffmpeg = createFFmpeg({
+        log: true,
+        corePath: 'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js',
+      });
+      if (!ffmpeg.isLoaded()) {
+        await ffmpeg.load();
+        ffmpegLoaded = true;
+        console.log('FFmpeg loaded successfully');
+      }
     } catch (error) {
-        console.error('Failed to auto-load FFmpeg:', error);
-        status.textContent = 'Failed to load video processor. Please refresh the page and try again.';
-        status.style.color = '#e74c3c';
-        
-        // Show a retry button
-        const retryBtn = document.createElement('button');
-        retryBtn.textContent = 'Retry';
-        retryBtn.className = 'btn btn-primary';
-        retryBtn.style.marginTop = '10px';
-        retryBtn.onclick = () => {
-            retryBtn.remove();
-            autoLoadFFmpeg();
-        };
-        status.parentElement.appendChild(retryBtn);
+      console.error('Failed to load FFmpeg:', error);
+      throw error;
     }
+  }
+  return ffmpeg;
 }
 
-// DOM Elements
+async function autoLoadFFmpeg() {
+  const status = document.getElementById('ffmpegStatus');
+  try {
+    status.textContent = 'Loading video processor… This may take a moment on first visit.';
+    status.style.color = '#01696f';
+    await initFFmpeg();
+    status.textContent = 'Video processor ready! Upload a video to begin.';
+    status.style.color = '#437a22';
+    uploadArea.style.opacity = '1';
+    uploadArea.style.pointerEvents = 'auto';
+  } catch (error) {
+    console.error('Failed to auto-load FFmpeg:', error);
+    status.textContent = 'Failed to load video processor. Please refresh and try again.';
+    status.style.color = '#a12c7b';
+    const retryBtn = document.createElement('button');
+    retryBtn.textContent = 'Retry';
+    retryBtn.className = 'btn btn-primary';
+    retryBtn.style.marginTop = '12px';
+    retryBtn.onclick = () => { retryBtn.remove(); autoLoadFFmpeg(); };
+    status.parentElement.appendChild(retryBtn);
+  }
+}
+
 const uploadArea = document.getElementById('uploadArea');
 const videoInput = document.getElementById('videoInput');
 const editorSection = document.getElementById('editorSection');
@@ -331,20 +478,41 @@ const outputVideo = document.getElementById('outputVideo');
 const volumeSlider = document.getElementById('volumeSlider');
 const volumeValue = document.getElementById('volumeValue');
 
-// Event Listeners
 uploadArea.addEventListener('click', () => {
-    if (ffmpegLoaded) {
-        videoInput.click();
-    } else {
-        showNotification('Please wait for the video processor to load', 'error');
-    }
+  if (ffmpegLoaded) videoInput.click();
+  else showNotification('Please wait for the video processor to load', 'error');
 });
-uploadArea.addEventListener('dragover', handleDragOver);
-uploadArea.addEventListener('dragleave', handleDragLeave);
-uploadArea.addEventListener('drop', handleDrop);
-videoInput.addEventListener('change', handleFileSelect);
+uploadArea.addEventListener('dragover', e => {
+  e.preventDefault();
+  uploadArea.classList.add('dragover');
+});
+uploadArea.addEventListener('dragleave', e => {
+  e.preventDefault();
+  uploadArea.classList.remove('dragover');
+});
+uploadArea.addEventListener('drop', e => {
+  e.preventDefault();
+  uploadArea.classList.remove('dragover');
+  if (!ffmpegLoaded) {
+    showNotification('Please wait for the video processor to load', 'error');
+    return;
+  }
+  const files = e.dataTransfer.files;
+  if (files.length > 0 && files[0].type.startsWith('video/')) {
+    handleVideoFile(files[0]);
+  } else {
+    showNotification('Please drop a video file', 'error');
+  }
+});
+videoInput.addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (file && file.type.startsWith('video/')) {
+    handleVideoFile(file);
+  } else {
+    showNotification('Please select a video file', 'error');
+  }
+});
 
-// Button event listeners
 document.getElementById('trimBtn').addEventListener('click', handleTrim);
 document.getElementById('resizeBtn').addEventListener('click', handleResize);
 document.getElementById('convertBtn').addEventListener('click', handleConvert);
@@ -354,425 +522,246 @@ document.getElementById('resetBtn').addEventListener('click', handleReset);
 document.getElementById('downloadBtn').addEventListener('click', handleDownload);
 document.getElementById('newVideoBtn').addEventListener('click', handleNewVideo);
 
-// Volume control
-volumeSlider.addEventListener('input', (e) => {
-    videoOperations.volume = e.target.value;
-    volumeValue.textContent = `${e.target.value}%`;
+volumeSlider.addEventListener('input', e => {
+  videoOperations.volume = e.target.value;
+  volumeValue.textContent = `${e.target.value}%`;
 });
 
-// Effect buttons
 document.querySelectorAll('.effect-btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        document.querySelectorAll('.effect-btn').forEach(b => b.classList.remove('active'));
-        if (videoOperations.effect === e.target.dataset.effect) {
-            videoOperations.effect = null;
-        } else {
-            e.target.classList.add('active');
-            videoOperations.effect = e.target.dataset.effect;
-        }
-    });
+  btn.addEventListener('click', e => {
+    document.querySelectorAll('.effect-btn').forEach(b => b.classList.remove('active'));
+    if (videoOperations.effect === e.target.dataset.effect) {
+      videoOperations.effect = null;
+    } else {
+      e.target.classList.add('active');
+      videoOperations.effect = e.target.dataset.effect;
+    }
+  });
 });
-
-// File handling functions
-function handleDragOver(e) {
-    e.preventDefault();
-    uploadArea.classList.add('dragover');
-}
-
-function handleDragLeave(e) {
-    e.preventDefault();
-    uploadArea.classList.remove('dragover');
-}
-
-function handleDrop(e) {
-    e.preventDefault();
-    uploadArea.classList.remove('dragover');
-    
-    if (!ffmpegLoaded) {
-        showNotification('Please wait for the video processor to load', 'error');
-        return;
-    }
-    
-    const files = e.dataTransfer.files;
-    if (files.length > 0 && files[0].type.startsWith('video/')) {
-        handleVideoFile(files[0]);
-    } else {
-        showNotification('Please drop a video file', 'error');
-    }
-}
-
-function handleFileSelect(e) {
-    const file = e.target.files[0];
-    if (file && file.type.startsWith('video/')) {
-        handleVideoFile(file);
-    } else {
-        showNotification('Please select a video file', 'error');
-    }
-}
 
 async function handleVideoFile(file) {
-    currentVideoFile = file;
-    currentVideoURL = URL.createObjectURL(file);
-    
-    // Display video
-    videoPlayer.src = currentVideoURL;
-    videoName.textContent = file.name;
-    
-    // Show editor section
-    uploadArea.style.display = 'none';
-    editorSection.style.display = 'block';
-    
-    // Get video duration when metadata is loaded
-    videoPlayer.addEventListener('loadedmetadata', () => {
-        const duration = videoPlayer.duration;
-        videoDuration.textContent = formatTime(duration);
-        endTimeInput.value = Math.floor(duration);
-        endTimeInput.max = duration;
-        startTimeInput.max = duration;
-    });
+  currentVideoFile = file;
+  currentVideoURL = URL.createObjectURL(file);
+  videoPlayer.src = currentVideoURL;
+  videoName.textContent = file.name;
+  document.getElementById('uploadSection').style.display = 'none';
+  editorSection.style.display = 'block';
+  videoPlayer.addEventListener('loadedmetadata', () => {
+    const duration = videoPlayer.duration;
+    videoDuration.textContent = formatTime(duration);
+    endTimeInput.value = Math.floor(duration);
+    endTimeInput.max = duration;
+    startTimeInput.max = duration;
+  }, { once: true });
 }
 
-// Video processing functions
 function handleTrim() {
-    const startTime = parseFloat(startTimeInput.value);
-    const endTime = parseFloat(endTimeInput.value);
-    
-    if (startTime >= 0 && endTime > startTime) {
-        videoOperations.trim = { start: startTime, end: endTime };
-        showNotification('Trim settings applied');
-    } else {
-        showNotification('Invalid trim times', 'error');
-    }
+  const startTime = parseFloat(startTimeInput.value);
+  const endTime = parseFloat(endTimeInput.value);
+  if (startTime >= 0 && endTime > startTime) {
+    videoOperations.trim = { start: startTime, end: endTime };
+    showNotification('Trim settings applied');
+  } else {
+    showNotification('Invalid trim times', 'error');
+  }
 }
 
 function handleResize() {
-    const resizeValue = document.getElementById('resizeSelect').value;
-    if (resizeValue) {
-        videoOperations.resize = resizeValue;
-        showNotification('Resize settings applied');
-    }
+  const resizeValue = document.getElementById('resizeSelect').value;
+  if (resizeValue) {
+    videoOperations.resize = resizeValue;
+    showNotification('Resize settings applied');
+  }
 }
 
 function handleConvert() {
-    const format = document.getElementById('formatSelect').value;
-    videoOperations.format = format;
-    showNotification(`Format set to ${format.toUpperCase()}`);
+  const format = document.getElementById('formatSelect').value;
+  videoOperations.format = format;
+  showNotification(`Format set to ${format.toUpperCase()}`);
 }
 
 function handleMute() {
-    videoOperations.mute = !videoOperations.mute;
-    document.getElementById('muteBtn').textContent = videoOperations.mute ? 'Add Audio' : 'Remove Audio';
-    showNotification(videoOperations.mute ? 'Audio will be removed' : 'Audio will be kept');
+  videoOperations.mute = !videoOperations.mute;
+  document.getElementById('muteBtn').textContent =
+    videoOperations.mute ? 'Add Audio' : 'Remove Audio';
+  showNotification(videoOperations.mute ? 'Audio will be removed' : 'Audio will be kept');
 }
 
 async function handleExport() {
-    showProcessingModal();
-    
+  showProcessingModal();
+  try {
+    updateProgress(5, 'Initializing FFmpeg…');
+    await initFFmpeg();
+    ffmpeg.setProgress(({ ratio }) => {
+      const pct = Math.round(ratio * 100);
+      updateProgress(pct, `Processing: ${pct}%`);
+    });
+    updateProgress(10, 'Loading video file…');
+    const inputExt = currentVideoFile.name.split('.').pop().toLowerCase();
+    const inputFileName = `input.${inputExt}`;
+    ffmpeg.FS('writeFile', inputFileName, await fetchFile(currentVideoFile));
+    updateProgress(20, 'Preparing FFmpeg command…');
+    const outputFileName = `output.${videoOperations.format}`;
+    const args = buildFFmpegArgs(inputFileName, outputFileName);
+    console.log('FFmpeg args:', '-i', inputFileName, ...args);
+    updateProgress(30, 'Processing video…');
+    await ffmpeg.run('-i', inputFileName, ...args);
+    updateProgress(90, 'Finalizing…');
+    const data = ffmpeg.FS('readFile', outputFileName);
+    const blob = new Blob([data.buffer], { type: `video/${videoOperations.format}` });
+    processedVideoURL = URL.createObjectURL(blob);
     try {
-        // Initialize FFmpeg if not already done
-        updateProgress(5, 'Initializing FFmpeg...');
-        await initFFmpeg();
-        
-        // Set progress callback
-        ffmpeg.setProgress(({ ratio }) => {
-            const percentage = Math.round(ratio * 100);
-            updateProgress(percentage, `Processing: ${percentage}%`);
-        });
-        
-        updateProgress(10, 'Loading video file...');
-        
-        // Get the file extension
-        const inputExt = currentVideoFile.name.split('.').pop().toLowerCase();
-        const inputFileName = `input.${inputExt}`;
-        
-        // Write input file to FFmpeg filesystem
-        ffmpeg.FS('writeFile', inputFileName, await fetchFile(currentVideoFile));
-        
-        updateProgress(20, 'Preparing FFmpeg command...');
-        
-        // Build FFmpeg command
-        const outputFileName = `output.${videoOperations.format}`;
-        const args = buildFFmpegArgs(inputFileName, outputFileName);
-        
-        console.log('FFmpeg command:', '-i', inputFileName, ...args);
-        updateProgress(30, 'Processing video...');
-        
-        // Execute FFmpeg command
-        await ffmpeg.run('-i', inputFileName, ...args);
-        
-        updateProgress(90, 'Finalizing...');
-        
-        // Read output file
-        const data = ffmpeg.FS('readFile', outputFileName);
-        const blob = new Blob([data.buffer], { type: `video/${videoOperations.format}` });
-        processedVideoURL = URL.createObjectURL(blob);
-        
-        // Clean up
-        try {
-            ffmpeg.FS('unlink', inputFileName);
-            ffmpeg.FS('unlink', outputFileName);
-        } catch (cleanupError) {
-            console.warn('Cleanup error:', cleanupError);
-        }
-        
-        updateProgress(100, 'Complete!');
-        
-        // Show output
-        setTimeout(() => {
-            hideProcessingModal();
-            showOutput();
-        }, 500);
-        
-    } catch (error) {
-        console.error('Export error:', error);
-        hideProcessingModal();
-        
-        // Provide more specific error messages
-        let errorMessage = 'Error processing video: ';
-        if (error.message.includes('SharedArrayBuffer')) {
-            errorMessage += 'Your browser requires specific headers for video processing. Please ensure CORS headers are properly set.';
-        } else if (error.message.includes('memory')) {
-            errorMessage += 'Out of memory. Try processing a smaller video or reducing quality settings.';
-        } else {
-            errorMessage += error.message;
-        }
-        
-        showNotification(errorMessage, 'error');
+      ffmpeg.FS('unlink', inputFileName);
+      ffmpeg.FS('unlink', outputFileName);
+    } catch (e) {
+      console.warn(e);
     }
+    updateProgress(100, 'Complete!');
+    setTimeout(() => {
+      hideProcessingModal();
+      showOutput();
+    }, 500);
+  } catch (error) {
+    console.error('Export error:', error);
+    hideProcessingModal();
+    let msg = 'Error processing video: ';
+    if (error.message && error.message.includes('SharedArrayBuffer')) {
+      msg += 'Browser requires COOP/COEP headers. Ensure Vercel vercel.json is set correctly.';
+    } else if (error.message && error.message.includes('memory')) {
+      msg += 'Out of memory. Try a smaller video.';
+    } else {
+      msg += error.message || 'Unknown error';
+    }
+    showNotification(msg, 'error');
+  }
 }
 
 function buildFFmpegArgs(inputFile, outputFile) {
-    const args = [];
-    
-    // Trim
-    if (videoOperations.trim) {
-        args.push('-ss', videoOperations.trim.start.toString());
-        args.push('-t', (videoOperations.trim.end - videoOperations.trim.start).toString());
+  const args = [];
+  if (videoOperations.trim) {
+    args.push('-ss', videoOperations.trim.start.toString());
+    args.push('-t', (videoOperations.trim.end - videoOperations.trim.start).toString());
+  }
+  const filters = [];
+  if (videoOperations.effect) {
+    switch (videoOperations.effect) {
+      case 'grayscale': filters.push('hue=s=0'); break;
+      case 'blur': filters.push('boxblur=5:1'); break;
+      case 'sharpen': filters.push('unsharp=5:5:1.0:5:5:0.0'); break;
+      case 'vintage': filters.push('curves=vintage'); break;
     }
-    
-    // Video filters
-    const filters = [];
-    
-    // Effects
-    if (videoOperations.effect) {
-        switch (videoOperations.effect) {
-            case 'grayscale':
-                filters.push('hue=s=0');
-                break;
-            case 'blur':
-                filters.push('boxblur=5:1');
-                break;
-            case 'sharpen':
-                filters.push('unsharp=5:5:1.0:5:5:0.0');
-                break;
-            case 'vintage':
-                filters.push('curves=vintage');
-                break;
-        }
-    }
-    
-    // Resize
-    if (videoOperations.resize) {
-        const [width, height] = videoOperations.resize.split('x');
-        filters.push(`scale=${width}:${height}`);
-    }
-    
-    if (filters.length > 0) {
-        args.push('-vf', filters.join(','));
-    }
-    
-    // Audio
-    if (videoOperations.mute) {
-        args.push('-an');
-    } else if (videoOperations.volume !== 100) {
-        args.push('-af', `volume=${videoOperations.volume / 100}`);
-    }
-    
-    // Format specific settings
-    if (videoOperations.format === 'gif') {
-        // GIF specific settings
-        args.push('-pix_fmt', 'rgb24');
-        args.push('-r', '10');
-    } else if (videoOperations.format === 'webm') {
-        // WebM settings
-        args.push('-c:v', 'libvpx');
-        args.push('-crf', '10');
-        args.push('-b:v', '1M');
-        if (!videoOperations.mute) {
-            args.push('-c:a', 'libvorbis');
-        }
-    } else {
-        // Default settings for MP4, MOV, AVI
-        args.push('-c:v', 'libx264');
-        args.push('-preset', 'medium');
-        args.push('-crf', '23');
-        args.push('-pix_fmt', 'yuv420p');
-        if (!videoOperations.mute) {
-            args.push('-c:a', 'aac');
-            args.push('-b:a', '128k');
-        }
-    }
-    
-    // Add format flag for certain formats
-    if (videoOperations.format === 'mov') {
-        args.push('-f', 'mov');
-    } else if (videoOperations.format === 'avi') {
-        args.push('-f', 'avi');
-    }
-    
-    args.push(outputFile);
-    
-    return args;
+  }
+  if (videoOperations.resize) {
+    const [w, h] = videoOperations.resize.split('x');
+    filters.push(`scale=${w}:${h}`);
+  }
+  if (filters.length > 0) args.push('-vf', filters.join(','));
+  if (videoOperations.mute) {
+    args.push('-an');
+  } else if (videoOperations.volume != 100) {
+    args.push('-af', `volume=${videoOperations.volume / 100}`);
+  }
+  if (videoOperations.format === 'gif') {
+    args.push('-pix_fmt', 'rgb24', '-r', '10');
+  } else if (videoOperations.format === 'webm') {
+    args.push('-c:v', 'libvpx', '-crf', '10', '-b:v', '1M');
+    if (!videoOperations.mute) args.push('-c:a', 'libvorbis');
+  } else {
+    args.push('-c:v', 'libx264', '-preset', 'medium', '-crf', '23', '-pix_fmt', 'yuv420p');
+    if (!videoOperations.mute) args.push('-c:a', 'aac', '-b:a', '128k');
+  }
+  if (videoOperations.format === 'mov') args.push('-f', 'mov');
+  else if (videoOperations.format === 'avi') args.push('-f', 'avi');
+  args.push(outputFile);
+  return args;
 }
 
 function handleReset() {
-    videoOperations = {
-        trim: null,
-        effect: null,
-        resize: null,
-        format: 'mp4',
-        mute: false,
-        volume: 100
-    };
-    
-    // Reset UI
-    startTimeInput.value = 0;
-    if (videoPlayer.duration) {
-        endTimeInput.value = Math.floor(videoPlayer.duration);
-    }
-    document.getElementById('resizeSelect').value = '';
-    document.getElementById('formatSelect').value = 'mp4';
-    document.querySelectorAll('.effect-btn').forEach(b => b.classList.remove('active'));
-    volumeSlider.value = 100;
-    volumeValue.textContent = '100%';
-    document.getElementById('muteBtn').textContent = 'Remove Audio';
-    
-    showNotification('All settings reset');
+  videoOperations = {
+    trim: null,
+    effect: null,
+    resize: null,
+    format: 'mp4',
+    mute: false,
+    volume: 100
+  };
+  startTimeInput.value = 0;
+  if (videoPlayer.duration) endTimeInput.value = Math.floor(videoPlayer.duration);
+  document.getElementById('resizeSelect').value = '';
+  document.getElementById('formatSelect').value = 'mp4';
+  document.querySelectorAll('.effect-btn').forEach(b => b.classList.remove('active'));
+  volumeSlider.value = 100;
+  volumeValue.textContent = '100%';
+  document.getElementById('muteBtn').textContent = 'Remove Audio';
+  showNotification('All settings reset');
 }
 
 function handleDownload() {
-    if (processedVideoURL) {
-        const a = document.createElement('a');
-        a.href = processedVideoURL;
-        a.download = `edited_video_${Date.now()}.${videoOperations.format}`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-    }
+  if (processedVideoURL) {
+    const a = document.createElement('a');
+    a.href = processedVideoURL;
+    a.download = `edited_video_${Date.now()}.${videoOperations.format}`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
 }
 
 function handleNewVideo() {
-    // Reset everything
-    handleReset();
-    currentVideoFile = null;
-    if (currentVideoURL) URL.revokeObjectURL(currentVideoURL);
-    if (processedVideoURL) URL.revokeObjectURL(processedVideoURL);
-    
-    // Reset UI
-    uploadArea.style.display = 'block';
-    editorSection.style.display = 'none';
-    outputSection.style.display = 'none';
-    videoInput.value = '';
+  handleReset();
+  currentVideoFile = null;
+  if (currentVideoURL) URL.revokeObjectURL(currentVideoURL);
+  if (processedVideoURL) URL.revokeObjectURL(processedVideoURL);
+  document.getElementById('uploadSection').style.display = 'block';
+  editorSection.style.display = 'none';
+  outputSection.style.display = 'none';
+  videoInput.value = '';
 }
 
-// Helper functions
-function formatTime(seconds) {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+function formatTime(s) {
+  const m = Math.floor(s / 60);
+  return `${m}:${Math.floor(s % 60).toString().padStart(2, '0')}`;
 }
 
 function showProcessingModal() {
-    processingModal.style.display = 'flex';
-    progressBarFill.style.width = '0%';
-    progressText.textContent = 'Initializing FFmpeg...';
+  processingModal.style.display = 'flex';
+  progressBarFill.style.width = '0%';
+  progressText.textContent = 'Initializing FFmpeg…';
 }
-
-function hideProcessingModal() {
-    processingModal.style.display = 'none';
+function hideProcessingModal() { processingModal.style.display = 'none'; }
+function updateProgress(pct, text) {
+  progressBarFill.style.width = `${pct}%`;
+  progressText.textContent = text;
 }
-
-function updateProgress(percentage, text) {
-    progressBarFill.style.width = `${percentage}%`;
-    progressText.textContent = text;
-}
-
 function showOutput() {
-    outputVideo.src = processedVideoURL;
-    outputSection.style.display = 'block';
-    editorSection.style.display = 'none';
+  outputVideo.src = processedVideoURL;
+  outputSection.style.display = 'block';
+  editorSection.style.display = 'none';
 }
 
 function showNotification(message, type = 'success') {
-    // Create notification element
-    const notification = document.createElement('div');
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 15px 20px;
-        background-color: ${type === 'error' ? '#e74c3c' : '#27ae60'};
-        color: white;
-        border-radius: 5px;
-        z-index: 2000;
-        animation: slideIn 0.3s ease;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    `;
-    notification.textContent = message;
-    document.body.appendChild(notification);
-    
-    // Remove notification after 3 seconds
-    setTimeout(() => {
-        notification.style.animation = 'slideOut 0.3s ease';
-        setTimeout(() => notification.remove(), 300);
-    }, 3000);
+  const n = document.createElement('div');
+  n.className = `notification ${type}`;
+  n.textContent = message;
+  document.body.appendChild(n);
+  setTimeout(() => {
+    n.style.animation = 'slideOut 0.25s cubic-bezier(0.16,1,0.3,1) both';
+    setTimeout(() => n.remove(), 260);
+  }, 3000);
 }
 
-// Add animation styles
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideIn {
-        from { 
-            transform: translateX(100%);
-            opacity: 0;
-        }
-        to { 
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-    @keyframes slideOut {
-        from { 
-            transform: translateX(0);
-            opacity: 1;
-        }
-        to { 
-            transform: translateX(100%);
-            opacity: 0;
-        }
-    }
-`;
-document.head.appendChild(style);
-
-// Check browser compatibility and auto-load FFmpeg on page load
 window.addEventListener('load', () => {
-    // Check for required features
-    if (!window.SharedArrayBuffer) {
-        const status = document.getElementById('ffmpegStatus');
-        status.textContent = 'Note: Your browser may have limited support. For best results, use Chrome or Firefox.';
-        status.style.color = '#e67e22';
-    }
-    
-    // Disable upload area initially
-    uploadArea.style.opacity = '0.5';
-    uploadArea.style.pointerEvents = 'none';
-    
-    // Auto-load FFmpeg
-    autoLoadFFmpeg();
+  if (!window.SharedArrayBuffer) {
+    const status = document.getElementById('ffmpegStatus');
+    status.textContent = 'Note: For best results, use Chrome or Firefox.';
+    status.style.color = '#da7101';
+  }
+  uploadArea.style.opacity = '0.5';
+  uploadArea.style.pointerEvents = 'none';
+  autoLoadFFmpeg();
 });
 
-
-      console.log("Single-file Vercel version loaded");
-    </script>
-  </body>
+console.log('Single-file Vercel version loaded');
+</script>
+</body>
 </html>
