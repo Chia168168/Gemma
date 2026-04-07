@@ -3,17 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Browser Video Editor - FFmpeg</title>
+    <title>Browser Video Editor</title>
     <link rel="stylesheet" href="css/style.css">
-    <!-- Updated FFmpeg WASM Scripts -->
-    <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js" type="8e46a0418f70e54577fa8331-text/javascript"></script>
-    <script src="https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js" type="8e46a0418f70e54577fa8331-text/javascript"></script>
+    
+    <!-- FFmpeg WASM -->
+    <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
+    <script src="https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js"></script>
 </head>
 <body>
     <div class="container">
         <header>
             <h1>Browser Video Editor</h1>
-            <p>Edit videos directly in your browser using FFmpeg</p>
+            <p>Edit videos directly in your browser using FFmpeg WASM</p>
         </header>
 
         <div class="upload-section">
@@ -31,114 +32,26 @@
             </div>
         </div>
 
+        <!-- 其餘 HTML 內容保持不變（editorSection、processingModal、outputSection） -->
+        <!-- 為了簡潔這裡省略中間大段相同的 HTML，請直接複製你原本 index.html 的內容進來 -->
+
         <div id="editorSection" class="editor-section" style="display: none;">
-            <div class="video-preview">
-                <video id="videoPlayer" controls></video>
-                <div class="video-info">
-                    <span id="videoName"></span>
-                    <span id="videoDuration"></span>
-                </div>
-            </div>
-
-            <div class="controls-section">
-                <div class="trim-controls">
-                    <h3>Trim Video</h3>
-                    <div class="time-inputs">
-                        <div class="time-input">
-                            <label>Start Time</label>
-                            <input type="number" id="startTime" min="0" step="0.1" value="0" placeholder="0">
-                            <span>seconds</span>
-                        </div>
-                        <div class="time-input">
-                            <label>End Time</label>
-                            <input type="number" id="endTime" min="0" step="0.1" placeholder="10">
-                            <span>seconds</span>
-                        </div>
-                    </div>
-                    <button id="trimBtn" class="btn btn-primary">Trim Video</button>
-                </div>
-
-                <div class="effects-controls">
-                    <h3>Video Effects</h3>
-                    <div class="effects-grid">
-                        <button class="effect-btn" data-effect="grayscale">Grayscale</button>
-                        <button class="effect-btn" data-effect="blur">Blur</button>
-                        <button class="effect-btn" data-effect="sharpen">Sharpen</button>
-                        <button class="effect-btn" data-effect="vintage">Vintage</button>
-                    </div>
-                </div>
-
-                <div class="resize-controls">
-                    <h3>Resize Video</h3>
-                    <div class="resize-options">
-                        <select id="resizeSelect">
-                            <option value="">Original Size</option>
-                            <option value="1920x1080">1080p (1920x1080)</option>
-                            <option value="1280x720">720p (1280x720)</option>
-                            <option value="854x480">480p (854x480)</option>
-                            <option value="640x360">360p (640x360)</option>
-                        </select>
-                        <button id="resizeBtn" class="btn btn-primary">Resize</button>
-                    </div>
-                </div>
-
-                <div class="format-controls">
-                    <h3>Convert Format</h3>
-                    <div class="format-options">
-                        <select id="formatSelect">
-                            <option value="mp4">MP4</option>
-                            <option value="webm">WebM</option>
-                            <option value="avi">AVI</option>
-                            <option value="mov">MOV</option>
-                            <option value="gif">GIF</option>
-                        </select>
-                        <button id="convertBtn" class="btn btn-primary">Convert</button>
-                    </div>
-                </div>
-
-                <div class="audio-controls">
-                    <h3>Audio Options</h3>
-                    <div class="audio-options">
-                        <button id="muteBtn" class="btn btn-secondary">Remove Audio</button>
-                        <div class="volume-control">
-                            <label>Volume</label>
-                            <input type="range" id="volumeSlider" min="0" max="200" value="100">
-                            <span id="volumeValue">100%</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="export-section">
-                <button id="exportBtn" class="btn btn-success btn-large">Export Video</button>
-                <button id="resetBtn" class="btn btn-secondary">Reset All Changes</button>
-            </div>
+            <!-- ... 你原本的 editorSection 全部內容 ... -->
         </div>
 
         <div id="processingModal" class="modal" style="display: none;">
-            <div class="modal-content">
-                <h3>Processing Video...</h3>
-                <div class="progress-bar">
-                    <div id="progressBarFill" class="progress-bar-fill"></div>
-                </div>
-                <p id="progressText">Initializing FFmpeg...</p>
-            </div>
+            <!-- ... 你原本的 processingModal ... -->
         </div>
 
         <div id="outputSection" class="output-section" style="display: none;">
-            <h3>Processed Video</h3>
-            <video id="outputVideo" controls></video>
-            <div class="output-actions">
-                <button id="downloadBtn" class="btn btn-success">Download Video</button>
-                <button id="newVideoBtn" class="btn btn-primary">Edit Another Video</button>
-            </div>
+            <!-- ... 你原本的 outputSection ... -->
         </div>
     </div>
 
     <footer>
-        <p>Powered by FFmpeg WASM - All processing happens in your browser</p>
+        <p>Powered by FFmpeg WASM • All processing happens in your browser</p>
     </footer>
 
-    <script src="js/app.js" type="8e46a0418f70e54577fa8331-text/javascript"></script>
-<script src="/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="8e46a0418f70e54577fa8331-|49" defer></script></body>
+    <script src="js/app.js"></script>
+</body>
 </html>
