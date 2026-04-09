@@ -9,75 +9,938 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root { --bg:#fafafa; --surface:#fff; --surface-2:#f5f5f5; --text:#111; --text-muted:#666; --text-faint:#8a8a8a; --border:#e8e8e8; --accent:#0070f3; --success:#0f8f4f; --warning:#b7791f; --error:#d12f6a; --radius-xl:24px; --shadow-sm:0 1px 2px rgba(0,0,0,.04); --shadow-md:0 10px 30px rgba(0,0,0,.06); --shadow-lg:0 24px 60px rgba(0,0,0,.1); --transition:180ms cubic-bezier(0.16,1,0.3,1); }
-    *{box-sizing:border-box;margin:0;padding:0} body{min-height:100dvh;font-family:'Inter',system-ui,sans-serif;background:radial-gradient(circle at top,#fff 0%,#fafafa 45%,#f5f5f5 100%);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased} button,input,select{font:inherit} button{border:0;background:none;cursor:pointer} video,svg{display:block;max-width:100%}
-    .page-shell{max-width:1120px;margin:0 auto;padding:28px 20px 80px}.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:42px}.brand{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:var(--text)}.brand-mark{width:34px;height:34px;border-radius:11px;background:#111;color:#fff;display:grid;place-items:center;box-shadow:var(--shadow-sm)}.brand-mark svg{width:18px;height:18px}.brand-text strong{display:block;font-size:14px;line-height:1.1;letter-spacing:-.02em}.brand-text span{display:block;font-size:12px;color:var(--text-muted);margin-top:2px}
-    .hero,.panel,.output-panel,.status-row{background:rgba(255,255,255,.84);backdrop-filter:blur(12px);border:1px solid rgba(0,0,0,.06);box-shadow:var(--shadow-md);border-radius:var(--radius-xl)}.hero{padding:clamp(24px,5vw,44px);margin-bottom:22px}.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--text-muted);padding:7px 10px;border-radius:999px;background:var(--surface-2);border:1px solid var(--border);margin-bottom:18px}.hero h1{font-size:clamp(34px,5vw,60px);line-height:1.02;letter-spacing:-.05em;font-weight:700;max-width:12ch;margin-bottom:14px}.hero p{font-size:16px;color:var(--text-muted);max-width:56ch}.hero-note{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.hero-note span{font-size:12px;color:var(--text-faint);background:#fff;border:1px solid var(--border);border-radius:999px;padding:8px 12px}
-    .status-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:24px;padding:16px 18px}.status-copy{font-size:14px;color:var(--text-muted)}.status-indicator{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:600}.status-indicator i{width:10px;height:10px;border-radius:999px;background:var(--warning);box-shadow:0 0 0 4px rgba(183,121,31,.12)}
-    .upload-area{background:linear-gradient(180deg,rgba(255,255,255,.96) 0%,rgba(250,250,250,.92) 100%);border:1px dashed #cfcfcf;border-radius:28px;padding:clamp(38px,7vw,72px) 22px;text-align:center;transition:all var(--transition);cursor:pointer;box-shadow:var(--shadow-md);margin-bottom:26px}.upload-area:hover{transform:translateY(-2px);border-color:#111;background:#fff}.upload-area.dragover{border-color:var(--accent);background:#f8fbff}.upload-icon{width:72px;height:72px;margin:0 auto 18px;border-radius:22px;background:#111;color:#fff;display:grid;place-items:center;box-shadow:var(--shadow-md)}.upload-area h2{font-size:clamp(24px,3vw,34px);line-height:1.05;letter-spacing:-.04em;margin-bottom:10px}.upload-area p{color:var(--text-muted);font-size:15px;max-width:56ch;margin:0 auto}
-    .editor-layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);gap:24px;align-items:start}.panel,.output-panel{padding:20px}.panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}.panel-title{font-size:18px;font-weight:700;letter-spacing:-.03em}.panel-subtitle{font-size:13px;color:var(--text-muted);margin-top:2px}.video-frame{border-radius:20px;overflow:hidden;background:#000;border:1px solid rgba(0,0,0,.06)} video{width:100%;max-height:540px;background:#000}.video-bar{display:flex;justify-content:space-between;gap:12px;padding:14px 4px 0;font-size:13px;color:var(--text-muted);flex-wrap:wrap}
-    .meta-panel{margin-top:16px;padding:16px;border-radius:18px;background:var(--surface-2);border:1px solid var(--border)}.meta-title{font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--text-faint);text-transform:uppercase;margin-bottom:12px}.meta-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.meta-item{padding:13px 14px;border-radius:14px;border:1px solid var(--border);background:rgba(255,255,255,.86);min-height:72px}.meta-label{font-size:12px;color:var(--text-faint);margin-bottom:4px}.meta-value{font-size:14px;color:var(--text);font-weight:600;line-height:1.35;word-break:break-word}
-    .sidebar-stack{display:grid;gap:16px;position:sticky;top:20px}.control-section{padding:18px;border-radius:20px;border:1px solid var(--border);background:rgba(255,255,255,.9);box-shadow:var(--shadow-sm)}.control-section h3{font-size:15px;font-weight:700;margin-bottom:12px}.field + .field{margin-top:12px}.field label{display:block;font-size:13px;color:var(--text-muted);margin-bottom:7px}.input,.select{width:100%;height:44px;border-radius:14px;border:1px solid var(--border);background:#fff;color:var(--text);padding:0 14px;outline:none;transition:all var(--transition)}.input:focus,.select:focus{border-color:#111;box-shadow:0 0 0 4px rgba(17,17,17,.06)}.inline-2{display:grid;grid-template-columns:1fr 1fr;gap:10px} input[type='range']{width:100%;accent-color:#111}.range-value{font-size:12px;color:var(--text-faint);margin-top:6px}
-    .button-row,.output-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.btn{min-height:44px;padding:0 16px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;gap:10px;font-size:14px;font-weight:600;transition:all var(--transition)}.btn:hover{transform:translateY(-1px)}.btn-primary{background:#111;color:#fff;box-shadow:0 10px 24px rgba(17,17,17,.18)}.btn-secondary{background:#fff;color:#111;border:1px solid var(--border)}.btn-success{background:var(--accent);color:#fff;box-shadow:0 10px 24px rgba(0,112,243,.18)}.btn-block{width:100%}.effect-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.effect-btn{min-height:44px;border-radius:14px;border:1px solid var(--border);background:#fff;color:var(--text-muted);font-size:13px;font-weight:600;transition:all var(--transition)}.effect-btn.active{background:#111;border-color:#111;color:#fff}.hint{font-size:12px;color:var(--text-faint);margin-top:10px}
-    .output-panel{margin-top:28px}.modal{position:fixed;inset:0;background:rgba(17,17,17,.42);display:flex;justify-content:center;align-items:center;padding:20px;z-index:1000;backdrop-filter:blur(10px)}.modal-card{width:min(460px,100%);border-radius:26px;background:rgba(255,255,255,.94);border:1px solid rgba(0,0,0,.08);padding:28px;box-shadow:var(--shadow-lg)}.modal-card h3{font-size:22px;line-height:1.1;letter-spacing:-.04em;margin-bottom:10px}.modal-card p{font-size:14px;color:var(--text-muted);margin-bottom:16px}.progress-track{width:100%;height:10px;border-radius:999px;overflow:hidden;background:#ececec;border:1px solid #e4e4e4}.progress-fill{width:0%;height:100%;border-radius:999px;background:linear-gradient(90deg,#111 0%,#0070f3 100%);transition:width .3s ease}.progress-meta{display:flex;justify-content:space-between;gap:12px;margin-top:12px;font-size:13px;color:var(--text-muted)}
-    .notification{position:fixed;right:18px;top:18px;z-index:2000;max-width:min(420px,calc(100vw - 36px));padding:13px 16px;border-radius:16px;color:#fff;font-size:14px;font-weight:600;box-shadow:var(--shadow-md);animation:slideIn .25s cubic-bezier(0.16,1,0.3,1) both}.notification.success{background:#111}.notification.error{background:var(--error)} footer{margin-top:56px;text-align:center;font-size:12px;color:var(--text-faint)} @keyframes slideIn{from{transform:translateY(-12px);opacity:0}to{transform:translateY(0);opacity:1}} @keyframes slideOut{from{transform:translateY(0);opacity:1}to{transform:translateY(-8px);opacity:0}} @media (max-width:960px){.editor-layout{grid-template-columns:1fr}.sidebar-stack{position:static}} @media (max-width:640px){.page-shell{padding-inline:14px}.hero,.panel,.output-panel,.status-row{border-radius:20px}.hero h1{max-width:none}.meta-grid,.inline-2,.effect-grid{grid-template-columns:1fr}.status-row,.video-bar,.button-row,.output-actions{flex-direction:column;align-items:stretch}}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{min-height:100dvh;font-family:'Inter',system-ui,sans-serif;background:radial-gradient(circle at top,#fff 0%,#fafafa 45%,#f5f5f5 100%);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+    button,input,select{font:inherit}
+    button{border:0;background:none;cursor:pointer}
+    video,svg{display:block;max-width:100%}
+    .page-shell{max-width:1120px;margin:0 auto;padding:28px 20px 80px}
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:42px}
+    .brand{display:inline-flex;align-items:center;gap:12px;text-decoration:none;color:var(--text)}
+    .brand-mark{width:34px;height:34px;border-radius:11px;background:#111;color:#fff;display:grid;place-items:center;box-shadow:var(--shadow-sm)}
+    .brand-mark svg{width:18px;height:18px}
+    .brand-text strong{display:block;font-size:14px;line-height:1.1;letter-spacing:-.02em}
+    .brand-text span{display:block;font-size:12px;color:var(--text-muted);margin-top:2px}
+    .hero,.panel,.output-panel,.status-row{background:rgba(255,255,255,.84);backdrop-filter:blur(12px);border:1px solid rgba(0,0,0,.06);box-shadow:var(--shadow-md);border-radius:var(--radius-xl)}
+    .hero{padding:clamp(24px,5vw,44px);margin-bottom:22px}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;color:var(--text-muted);padding:7px 10px;border-radius:999px;background:var(--surface-2);border:1px solid var(--border);margin-bottom:18px}
+    .hero h1{font-size:clamp(34px,5vw,60px);line-height:1.02;letter-spacing:-.05em;font-weight:700;max-width:12ch;margin-bottom:14px}
+    .hero p{font-size:16px;color:var(--text-muted);max-width:56ch}
+    .hero-note{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+    .hero-note span{font-size:12px;color:var(--text-faint);background:#fff;border:1px solid var(--border);border-radius:999px;padding:8px 12px}
+    .status-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:24px;padding:16px 18px}
+    .status-copy{font-size:14px;color:var(--text-muted)}
+    .status-indicator{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:600}
+    .status-indicator i{width:10px;height:10px;border-radius:999px;background:var(--warning);box-shadow:0 0 0 4px rgba(183,121,31,.12)}
+    .upload-area{background:linear-gradient(180deg,rgba(255,255,255,.96) 0%,rgba(250,250,250,.92) 100%);border:1px dashed #cfcfcf;border-radius:28px;padding:clamp(38px,7vw,72px) 22px;text-align:center;transition:all var(--transition);cursor:pointer;box-shadow:var(--shadow-md);margin-bottom:26px}
+    .upload-area:hover{transform:translateY(-2px);border-color:#111;background:#fff}
+    .upload-area.dragover{border-color:var(--accent);background:#f8fbff}
+    .upload-icon{width:72px;height:72px;margin:0 auto 18px;border-radius:22px;background:#111;color:#fff;display:grid;place-items:center;box-shadow:var(--shadow-md)}
+    .upload-area h2{font-size:clamp(24px,3vw,34px);line-height:1.05;letter-spacing:-.04em;margin-bottom:10px}
+    .upload-area p{color:var(--text-muted);font-size:15px;max-width:56ch;margin:0 auto}
+    .editor-layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,.85fr);gap:24px;align-items:start}
+    .panel,.output-panel{padding:20px}
+    .panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+    .panel-title{font-size:18px;font-weight:700;letter-spacing:-.03em}
+    .panel-subtitle{font-size:13px;color:var(--text-muted);margin-top:2px}
+    .video-frame{border-radius:20px;overflow:hidden;background:#000;border:1px solid rgba(0,0,0,.06)}
+    video{width:100%;max-height:540px;background:#000}
+    .video-bar{display:flex;justify-content:space-between;gap:12px;padding:14px 4px 0;font-size:13px;color:var(--text-muted);flex-wrap:wrap;align-items:center}
+    .frame-controls{display:flex;gap:6px;margin-left:auto}
+    .frame-btn{min-height:32px;padding:0 10px;border-radius:999px;border:1px solid var(--border);background:#fff;color:var(--text-muted);font-size:12px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;transition:all var(--transition)}
+    .frame-btn:hover{transform:translateY(-1px);background:#f5f5f5}
+    .meta-panel{margin-top:16px;padding:16px;border-radius:18px;background:var(--surface-2);border:1px solid var(--border)}
+    .meta-title{font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--text-faint);text-transform:uppercase;margin-bottom:12px}
+    .meta-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .meta-item{padding:13px 14px;border-radius:14px;border:1px solid var(--border);background:rgba(255,255,255,.86);min-height:72px}
+    .meta-label{font-size:12px;color:var(--text-faint);margin-bottom:4px}
+    .meta-value{font-size:14px;color:var(--text);font-weight:600;line-height:1.35;word-break:break-word}
+    .sidebar-stack{display:grid;gap:16px;position:sticky;top:20px}
+    .control-section{padding:18px;border-radius:20px;border:1px solid var(--border);background:rgba(255,255,255,.9);box-shadow:var(--shadow-sm)}
+    .control-section h3{font-size:15px;font-weight:700;margin-bottom:12px}
+    .field + .field{margin-top:12px}
+    .field label{display:block;font-size:13px;color:var(--text-muted);margin-bottom:7px}
+    .input,.select{width:100%;height:44px;border-radius:14px;border:1px solid var(--border);background:#fff;color:var(--text);padding:0 14px;outline:none;transition:all var(--transition)}
+    .input:focus,.select:focus{border-color:#111;box-shadow:0 0 0 4px rgba(17,17,17,.06)}
+    .inline-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    input[type='range']{width:100%;accent-color:#111}
+    .range-value{font-size:12px;color:var(--text-faint);margin-top:6px}
+    .button-row,.output-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    .btn{min-height:44px;padding:0 16px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;gap:10px;font-size:14px;font-weight:600;transition:all var(--transition)}
+    .btn:hover{transform:translateY(-1px)}
+    .btn-primary{background:#111;color:#fff;box-shadow:0 10px 24px rgba(17,17,17,.18)}
+    .btn-secondary{background:#fff;color:#111;border:1px solid var(--border)}
+    .btn-success{background:var(--accent);color:#fff;box-shadow:0 10px 24px rgba(0,112,243,.18)}
+    .btn-block{width:100%}
+    .effect-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .effect-btn{min-height:44px;border-radius:14px;border:1px solid var(--border);background:#fff;color:var(--text-muted);font-size:13px;font-weight:600;transition:all var(--transition)}
+    .effect-btn.active{background:#111;border-color:#111;color:#fff}
+    .hint{font-size:12px;color:var(--text-faint);margin-top:10px}
+    .output-panel{margin-top:28px}
+    .modal{position:fixed;inset:0;background:rgba(17,17,17,.42);display:flex;justify-content:center;align-items:center;padding:20px;z-index:1000;backdrop-filter:blur(10px)}
+    .modal-card{width:min(460px,100%);border-radius:26px;background:rgba(255,255,255,.94);border:1px solid rgba(0,0,0,.08);padding:28px;box-shadow:var(--shadow-lg)}
+    .modal-card h3{font-size:22px;line-height:1.1;letter-spacing:-.04em;margin-bottom:10px}
+    .modal-card p{font-size:14px;color:var(--text-muted);margin-bottom:16px}
+    .progress-track{width:100%;height:10px;border-radius:999px;overflow:hidden;background:#ececec;border:1px solid #e4e4e4}
+    .progress-fill{width:0%;height:100%;border-radius:999px;background:linear-gradient(90deg,#111 0%,#0070f3 100%);transition:width .3s ease}
+    .progress-meta{display:flex;justify-content:space-between;gap:12px;margin-top:12px;font-size:13px;color:var(--text-muted)}
+    .notification{position:fixed;right:18px;top:18px;z-index:2000;max-width:min(420px,calc(100vw - 36px));padding:13px 16px;border-radius:16px;color:#fff;font-size:14px;font-weight:600;box-shadow:var(--shadow-md);animation:slideIn .25s cubic-bezier(0.16,1,0.3,1) both}
+    .notification.success{background:#111}
+    .notification.error{background:var(--error)}
+    footer{margin-top:56px;text-align:center;font-size:12px;color:var(--text-faint)}
+    @keyframes slideIn{from{transform:translateY(-12px);opacity:0}to{transform:translateY(0);opacity:1}}
+    @keyframes slideOut{from{transform:translateY(0);opacity:1}to{transform:translateY(-8px);opacity:0}}
+    @media (max-width:960px){
+      .editor-layout{grid-template-columns:1fr}
+      .sidebar-stack{position:static}
+    }
+    @media (max-width:640px){
+      .page-shell{padding-inline:14px}
+      .hero,.panel,.output-panel,.status-row{border-radius:20px}
+      .hero h1{max-width:none}
+      .meta-grid,.inline-2,.effect-grid{grid-template-columns:1fr}
+      .status-row,.video-bar,.button-row,.output-actions{flex-direction:column;align-items:stretch}
+      .frame-controls{justify-content:flex-start;margin-left:0}
+    }
   </style>
+
+  <!-- ffmpeg.wasm -->
   <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
+  <!-- mediainfo.js：可改成本機託管路徑 -->
+  <script src="https://unpkg.com/mediainfo.js/dist/mediainfo.min.js"></script>
 </head>
 <body>
   <div class="page-shell">
-    <header class="topbar"><a class="brand" href="#" aria-label="Teng Video Crop 首頁"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h10" /><path d="M4 12h16" /><path d="M4 17h10" /><path d="M18 7l2 2-2 2" /></svg></span><span class="brand-text"><strong>Teng Video Crop</strong><span>Browser-based video editor</span></span></a></header>
-    <section class="hero"><div class="eyebrow">MOV 已優化 · 裁切可免重編碼</div><h1>瀏覽器內完成影片處理，裁切也能走快速模式。</h1><p>若只是裁切或 MOV / MP4 容器轉換，而且沒有特效、縮放或音訊變更，系統會優先走不重編碼快速路徑。</p><div class="hero-note"><span>Trim Copy Mode</span><span>Fast Remux</span><span>FFmpeg WASM</span><span>Single HTML</span></div></section>
-    <div class="status-row"><div class="status-copy" id="ffmpegStatusText">正在初始化影片處理核心，首次載入可能需要 10–30 秒。</div><div class="status-indicator"><i id="statusDot"></i><span id="statusLabel">準備中</span></div></div>
-    <section id="uploadSection"><div class="upload-area" id="uploadArea"><div class="upload-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div><h2>拖曳影片進來，或點一下直接選檔。</h2><p>若只是快速裁切，系統會優先用 stream copy；速度更快，但裁切點通常會落在關鍵影格附近。</p><input type="file" id="videoInput" accept="video/*" hidden /></div></section>
-    <section id="editorSection" style="display:none;"><div class="editor-layout"><div class="panel"><div class="panel-header"><div><div class="panel-title">預覽與原始資訊</div><div class="panel-subtitle">上傳後自動讀取影片基本資料與 FPS</div></div></div><div class="video-frame"><video id="videoPlayer" controls></video></div><div class="video-bar"><span id="videoName">—</span><span id="videoDuration">—</span></div><div id="videoMetaPanel" class="meta-panel" style="display:none;"><div class="meta-title">Video Details</div><div class="meta-grid"><div class="meta-item"><div class="meta-label">格式</div><div class="meta-value" id="metaFormat">—</div></div><div class="meta-item"><div class="meta-label">檔案大小</div><div class="meta-value" id="metaSize">—</div></div><div class="meta-item"><div class="meta-label">影片長度</div><div class="meta-value" id="metaDurationFull">—</div></div><div class="meta-item"><div class="meta-label">FPS</div><div class="meta-value" id="metaFps">—</div></div><div class="meta-item"><div class="meta-label">解析度</div><div class="meta-value" id="metaResolution">—</div></div><div class="meta-item"><div class="meta-label">檔名</div><div class="meta-value" id="metaFilename">—</div></div></div></div></div>
-      <aside class="sidebar-stack">
-        <div class="control-section"><h3>時間裁切</h3><div class="inline-2"><div class="field"><label for="startTime">起始秒數</label><input class="input" type="number" id="startTime" min="0" step="0.1" value="0" /></div><div class="field"><label for="endTime">結束秒數</label><input class="input" type="number" id="endTime" min="0" step="0.1" /></div></div><div class="button-row"><button id="trimBtn" class="btn btn-secondary btn-block">套用裁切設定</button></div></div>
-        <div class="control-section"><h3>輸出解析度</h3><div class="field"><label for="resizeSelect">選擇尺寸</label><select class="select" id="resizeSelect"><option value="">保留原始解析度</option><option value="1920x1080">1080p</option><option value="1280x720">720p</option><option value="854x480">480p</option><option value="640x360">360p</option></select></div><div class="button-row"><button id="resizeBtn" class="btn btn-secondary btn-block">套用尺寸設定</button></div></div>
-        <div class="control-section"><h3>輸出格式</h3><div class="field"><label for="formatSelect">輸出檔案格式</label><select class="select" id="formatSelect"><option value="mp4" selected>MP4</option><option value="webm">WebM</option><option value="mov">MOV</option><option value="avi">AVI</option><option value="gif">GIF</option></select></div><div class="button-row"><button id="convertBtn" class="btn btn-secondary btn-block">套用格式設定</button></div></div>
-        <div class="control-section"><h3>聲音控制</h3><div class="field"><label for="volumeSlider">音量調整</label><input type="range" id="volumeSlider" min="0" max="200" value="100" /><div class="range-value" id="volumeValue">100%</div></div><div class="button-row"><button id="muteBtn" class="btn btn-secondary btn-block">移除音訊</button></div></div>
-        <div class="control-section"><h3>影像效果</h3><div class="effect-grid"><button class="effect-btn" data-effect="grayscale">黑白</button><button class="effect-btn" data-effect="blur">模糊</button><button class="effect-btn" data-effect="sharpen">銳化</button><button class="effect-btn" data-effect="vintage">復古</button></div></div>
-        <div class="control-section"><h3>輸出</h3><div class="button-row" style="margin-top:0;"><button id="exportBtn" class="btn btn-success btn-block">開始輸出影片</button><button id="resetBtn" class="btn btn-primary btn-block">重設全部設定</button></div><div class="hint">只要沒有特效、縮放、靜音或改音量，連裁切也會優先用不重編碼快速模式；但裁切點可能會落在關鍵影格附近。</div></div>
-      </aside></div></section>
-    <section id="outputSection" class="output-panel" style="display:none;"><div class="panel-header"><div><div class="panel-title">輸出完成</div><div class="panel-subtitle">可直接下載，或重新上傳另一支影片</div></div></div><div class="video-frame"><video id="outputVideo" controls></video></div><div class="output-actions"><button id="downloadBtn" class="btn btn-success">下載影片</button><button id="newVideoBtn" class="btn btn-secondary">處理另一支影片</button></div></section>
-    <div id="processingModal" class="modal" style="display:none;"><div class="modal-card"><h3>正在處理影片</h3><p id="progressHint">FFmpeg 正在瀏覽器端執行，請稍候。</p><div class="progress-track"><div id="progressBarFill" class="progress-fill"></div></div><div class="progress-meta"><span id="progressText">初始化中…</span><span id="progressPercent">0%</span></div></div></div>
-    <footer>FFmpeg WASM · Trim Copy Mode Enabled · 可直接整份覆蓋部署</footer>
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Teng Video Crop 首頁">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 7h10" />
+            <path d="M4 12h16" />
+            <path d="M4 17h10" />
+            <path d="M18 7l2 2-2 2" />
+          </svg>
+        </span>
+        <span class="brand-text">
+          <strong>Teng Video Crop</strong>
+          <span>Browser-based video editor</span>
+        </span>
+      </a>
+    </header>
+
+    <section class="hero">
+      <div class="eyebrow">MOV 已優化 · 裁切可免重編碼</div>
+      <h1>瀏覽器內完成影片處理，裁切也能走快速模式。</h1>
+      <p>若只是裁切或 MOV / MP4 容器轉換，而且沒有特效、縮放或音訊變更，系統會優先走不重編碼快速路徑。</p>
+      <div class="hero-note">
+        <span>Trim Copy Mode</span>
+        <span>Fast Remux</span>
+        <span>FFmpeg WASM</span>
+        <span>MediaInfo.js</span>
+      </div>
+    </section>
+
+    <div class="status-row">
+      <div class="status-copy" id="ffmpegStatusText">正在初始化影片處理核心，首次載入可能需要 10–30 秒。</div>
+      <div class="status-indicator">
+        <i id="statusDot"></i>
+        <span id="statusLabel">準備中</span>
+      </div>
+    </div>
+
+    <section id="uploadSection">
+      <div class="upload-area" id="uploadArea">
+        <div class="upload-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+        </div>
+        <h2>拖曳影片進來，或點一下直接選檔。</h2>
+        <p>若只是快速裁切，系統會優先用 stream copy；速度更快，但裁切點通常會落在關鍵影格附近。</p>
+        <input type="file" id="videoInput" accept="video/*" hidden />
+      </div>
+    </section>
+
+    <section id="editorSection" style="display:none;">
+      <div class="editor-layout">
+        <div class="panel">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">預覽與原始資訊</div>
+              <div class="panel-subtitle">上傳後由 MediaInfo.js 讀取影片資訊與 FPS</div>
+            </div>
+          </div>
+
+          <div class="video-frame">
+            <video id="videoPlayer" controls></video>
+          </div>
+
+          <div class="video-bar">
+            <span id="videoName">—</span>
+            <span id="videoDuration">—</span>
+            <div class="frame-controls">
+              <button id="prevFrameBtn" class="frame-btn">← 1 frame</button>
+              <button id="nextFrameBtn" class="frame-btn">1 frame →</button>
+            </div>
+          </div>
+
+          <div id="videoMetaPanel" class="meta-panel" style="display:none;">
+            <div class="meta-title">Video Details</div>
+            <div class="meta-grid">
+              <div class="meta-item">
+                <div class="meta-label">格式 / 編碼</div>
+                <div class="meta-value" id="metaFormat">—</div>
+              </div>
+              <div class="meta-item">
+                <div class="meta-label">檔案大小</div>
+                <div class="meta-value" id="metaSize">—</div>
+              </div>
+              <div class="meta-item">
+                <div class="meta-label">影片長度</div>
+                <div class="meta-value" id="metaDurationFull">—</div>
+              </div>
+              <div class="meta-item">
+                <div class="meta-label">FPS</div>
+                <div class="meta-value" id="metaFps">—</div>
+              </div>
+              <div class="meta-item">
+                <div class="meta-label">解析度</div>
+                <div class="meta-value" id="metaResolution">—</div>
+              </div>
+              <div class="meta-item">
+                <div class="meta-label">檔名</div>
+                <div class="meta-value" id="metaFilename">—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="sidebar-stack">
+          <div class="control-section">
+            <h3>時間裁切</h3>
+            <div class="inline-2">
+              <div class="field">
+                <label for="startTime">起始秒數</label>
+                <input class="input" type="number" id="startTime" min="0" step="0.1" value="0" />
+              </div>
+              <div class="field">
+                <label for="endTime">結束秒數</label>
+                <input class="input" type="number" id="endTime" min="0" step="0.1" />
+              </div>
+            </div>
+            <div class="button-row">
+              <button id="trimBtn" class="btn btn-secondary btn-block">套用裁切設定</button>
+            </div>
+          </div>
+
+          <div class="control-section">
+            <h3>輸出解析度</h3>
+            <div class="field">
+              <label for="resizeSelect">選擇尺寸</label>
+              <select class="select" id="resizeSelect">
+                <option value="">保留原始解析度</option>
+                <option value="1920x1080">1080p</option>
+                <option value="1280x720">720p</option>
+                <option value="854x480">480p</option>
+                <option value="640x360">360p</option>
+              </select>
+            </div>
+            <div class="button-row">
+              <button id="resizeBtn" class="btn btn-secondary btn-block">套用尺寸設定</button>
+            </div>
+          </div>
+
+          <div class="control-section">
+            <h3>輸出格式</h3>
+            <div class="field">
+              <label for="formatSelect">輸出檔案格式</label>
+              <select class="select" id="formatSelect">
+                <option value="mp4" selected>MP4</option>
+                <option value="webm">WebM</option>
+                <option value="mov">MOV</option>
+                <option value="avi">AVI</option>
+                <option value="gif">GIF</option>
+              </select>
+            </div>
+            <div class="button-row">
+              <button id="convertBtn" class="btn btn-secondary btn-block">套用格式設定</button>
+            </div>
+          </div>
+
+          <div class="control-section">
+            <h3>聲音控制</h3>
+            <div class="field">
+              <label for="volumeSlider">音量調整</label>
+              <input type="range" id="volumeSlider" min="0" max="200" value="100" />
+              <div class="range-value" id="volumeValue">100%</div>
+            </div>
+            <div class="button-row">
+              <button id="muteBtn" class="btn btn-secondary btn-block">移除音訊</button>
+            </div>
+          </div>
+
+          <div class="control-section">
+            <h3>影像效果</h3>
+            <div class="effect-grid">
+              <button class="effect-btn" data-effect="grayscale">黑白</button>
+              <button class="effect-btn" data-effect="blur">模糊</button>
+              <button class="effect-btn" data-effect="sharpen">銳化</button>
+              <button class="effect-btn" data-effect="vintage">復古</button>
+            </div>
+          </div>
+
+          <div class="control-section">
+            <h3>輸出</h3>
+            <div class="button-row" style="margin-top:0;">
+              <button id="exportBtn" class="btn btn-success btn-block">開始輸出影片</button>
+              <button id="resetBtn" class="btn btn-primary btn-block">重設全部設定</button>
+            </div>
+            <div class="hint">
+              只要沒有特效、縮放、靜音或改音量，連裁切也會優先用不重編碼快速模式；但裁切點可能會落在關鍵影格附近。
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="outputSection" class="output-panel" style="display:none;">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">輸出完成</div>
+          <div class="panel-subtitle">可直接下載，或重新上傳另一支影片</div>
+        </div>
+      </div>
+      <div class="video-frame">
+        <video id="outputVideo" controls></video>
+      </div>
+      <div class="output-actions">
+        <button id="downloadBtn" class="btn btn-success">下載影片</button>
+        <button id="newVideoBtn" class="btn btn-secondary">處理另一支影片</button>
+      </div>
+    </section>
+
+    <div id="processingModal" class="modal" style="display:none;">
+      <div class="modal-card">
+        <h3>正在處理影片</h3>
+        <p id="progressHint">FFmpeg 正在瀏覽器端執行，請稍候。</p>
+        <div class="progress-track">
+          <div id="progressBarFill" class="progress-fill"></div>
+        </div>
+        <div class="progress-meta">
+          <span id="progressText">初始化中…</span>
+          <span id="progressPercent">0%</span>
+        </div>
+      </div>
+    </div>
+
+    <footer>FFmpeg WASM · MediaInfo.js · Trim Copy Mode Enabled · 可直接整份覆蓋部署</footer>
   </div>
+
   <script>
     const { createFFmpeg, fetchFile } = FFmpeg;
-    let ffmpeg = null, ffmpegLoaded = false, currentVideoFile = null, currentVideoURL = null, processedVideoURL = null, detectedFPS = null;
-    let videoOperations = { trim:null, effect:null, resize:null, format:'mp4', mute:false, volume:100 };
-    const uploadArea = document.getElementById('uploadArea'), videoInput = document.getElementById('videoInput'), uploadSection = document.getElementById('uploadSection'), editorSection = document.getElementById('editorSection'), outputSection = document.getElementById('outputSection'), videoPlayer = document.getElementById('videoPlayer'), outputVideo = document.getElementById('outputVideo'), videoName = document.getElementById('videoName'), videoDuration = document.getElementById('videoDuration'), startTimeInput = document.getElementById('startTime'), endTimeInput = document.getElementById('endTime'), volumeSlider = document.getElementById('volumeSlider'), volumeValue = document.getElementById('volumeValue'), processingModal = document.getElementById('processingModal'), progressBarFill = document.getElementById('progressBarFill'), progressText = document.getElementById('progressText'), progressPercent = document.getElementById('progressPercent'), progressHint = document.getElementById('progressHint'), ffmpegStatusText = document.getElementById('ffmpegStatusText'), statusLabel = document.getElementById('statusLabel'), statusDot = document.getElementById('statusDot');
-    function setStatus(text,label,type='loading'){ffmpegStatusText.textContent=text;statusLabel.textContent=label;if(type==='ready'){statusDot.style.background='var(--success)';statusDot.style.boxShadow='0 0 0 4px rgba(15,143,79,.12)'}else if(type==='error'){statusDot.style.background='var(--error)';statusDot.style.boxShadow='0 0 0 4px rgba(209,47,106,.12)'}else{statusDot.style.background='var(--warning)';statusDot.style.boxShadow='0 0 0 4px rgba(183,121,31,.12)'}}
-    function formatBytes(bytes){if(!bytes&&bytes!==0)return '—';const units=['B','KB','MB','GB','TB'];let i=0,v=bytes;while(v>=1024&&i<units.length-1){v/=1024;i++}return `${v.toFixed(v>=100||i===0?0:v>=10?1:2)} ${units[i]}`}
-    function formatTime(seconds){if(!isFinite(seconds))return '—';const m=Math.floor(seconds/60);const s=Math.floor(seconds%60).toString().padStart(2,'0');return `${m}:${s}`}
-    function formatDurationFull(seconds){if(!isFinite(seconds))return '—';const h=Math.floor(seconds/3600).toString().padStart(2,'0');const m=Math.floor((seconds%3600)/60).toString().padStart(2,'0');const s=Math.floor(seconds%60).toString().padStart(2,'0');return h==='00'?`${m}:${s}`:`${h}:${m}:${s}`}
-    function getExtension(filename){const parts=filename.split('.');return parts.length>1?parts.pop().toLowerCase():'—'}
-    function isMovFile(file){return !!file&&(file.name.toLowerCase().endsWith('.mov')||file.type==='video/quicktime')}
-    function shouldFastRemux(targetFormat){return !videoOperations.effect&&!videoOperations.resize&&!videoOperations.mute&&videoOperations.volume===100&&['mp4','mov'].includes(targetFormat)}
-    function updateMetaField(id,value){const el=document.getElementById(id);if(el)el.textContent=value??'—'}
-    function resetVideoMetaPanel(){['metaFormat','metaSize','metaDurationFull','metaFps','metaResolution','metaFilename'].forEach(id=>updateMetaField(id,'—'))}
-    function showVideoMetaPanel(){document.getElementById('videoMetaPanel').style.display='block'}
-    function parseFPSFromLog(message){if(!message)return null;const patterns=[/ ,\s*([\d.]+)\s*fps\b/i,/Stream.*?([\d.]+)\s*fps\b/i,/([\d.]+)\s*tbr\b/i];for(const regex of patterns){const m=message.match(regex);if(m&&m[1]){const fps=parseFloat(m[1]);if(fps>0&&fps<1000)return fps}}return null}
-    function updateFPSDisplay(fps){detectedFPS=fps;updateMetaField('metaFps',fps?`${fps} fps`:'—')}
-    async function initFFmpeg(){if(!ffmpeg){const baseUrl=window.location.origin;const coreUrl=`${baseUrl}/ffmpeg/ffmpeg-core.js`;ffmpeg=createFFmpeg({log:true,corePath:coreUrl,logger:({message})=>{const fps=parseFPSFromLog(message);if(fps&&!detectedFPS)updateFPSDisplay(fps)}})}if(!ffmpeg.isLoaded()){await ffmpeg.load();ffmpegLoaded=true}return ffmpeg}
-    async function autoLoadFFmpeg(){try{setStatus('正在初始化影片處理核心，首次載入可能需要 10–30 秒。','準備中','loading');uploadArea.style.opacity='0.55';uploadArea.style.pointerEvents='none';await initFFmpeg();setStatus('影片處理核心已就緒，可以開始上傳影片。','已就緒','ready');uploadArea.style.opacity='1';uploadArea.style.pointerEvents='auto'}catch(error){console.error(error);setStatus('影片處理核心載入失敗，請重新整理頁面後再試一次。','載入失敗','error');showNotification('FFmpeg 載入失敗，請重新整理頁面。','error')}}
-    uploadArea.addEventListener('click',()=>{if(!ffmpegLoaded)return showNotification('請先等待核心初始化完成。','error');videoInput.click()}); uploadArea.addEventListener('dragover',e=>{e.preventDefault();uploadArea.classList.add('dragover')}); uploadArea.addEventListener('dragleave',e=>{e.preventDefault();uploadArea.classList.remove('dragover')}); uploadArea.addEventListener('drop',e=>{e.preventDefault();uploadArea.classList.remove('dragover');if(!ffmpegLoaded)return showNotification('請先等待核心初始化完成。','error');const file=e.dataTransfer.files?.[0];if(file&&file.type.startsWith('video/'))handleVideoFile(file);else showNotification('請拖曳正確的影片檔。','error')}); videoInput.addEventListener('change',e=>{const file=e.target.files?.[0];if(file&&file.type.startsWith('video/'))handleVideoFile(file);else showNotification('請選擇正確的影片檔。','error')});
-    document.getElementById('trimBtn').addEventListener('click',handleTrim); document.getElementById('resizeBtn').addEventListener('click',handleResize); document.getElementById('convertBtn').addEventListener('click',handleConvert); document.getElementById('muteBtn').addEventListener('click',handleMute); document.getElementById('exportBtn').addEventListener('click',handleExport); document.getElementById('resetBtn').addEventListener('click',handleReset); document.getElementById('downloadBtn').addEventListener('click',handleDownload); document.getElementById('newVideoBtn').addEventListener('click',handleNewVideo);
-    volumeSlider.addEventListener('input',e=>{videoOperations.volume=Number(e.target.value);volumeValue.textContent=`${e.target.value}%`});
-    document.querySelectorAll('.effect-btn').forEach(btn=>btn.addEventListener('click',e=>{const effect=e.currentTarget.dataset.effect;if(videoOperations.effect===effect){videoOperations.effect=null;e.currentTarget.classList.remove('active')}else{document.querySelectorAll('.effect-btn').forEach(b=>b.classList.remove('active'));videoOperations.effect=effect;e.currentTarget.classList.add('active')}}));
-    async function handleVideoFile(file){currentVideoFile=file;detectedFPS=null;resetVideoMetaPanel();showVideoMetaPanel();if(currentVideoURL)URL.revokeObjectURL(currentVideoURL);currentVideoURL=URL.createObjectURL(file);videoPlayer.src=currentVideoURL;videoName.textContent=file.name;videoDuration.textContent='讀取中…';const ext=getExtension(file.name).toUpperCase(), mime=file.type||'unknown';updateMetaField('metaFilename',file.name);updateMetaField('metaFormat',ext!=='—'?`${ext} (${mime})`:mime);updateMetaField('metaSize',formatBytes(file.size));updateMetaField('metaFps','—');uploadSection.style.display='none';outputSection.style.display='none';editorSection.style.display='block';videoPlayer.addEventListener('loadedmetadata',async()=>{const duration=videoPlayer.duration, width=videoPlayer.videoWidth, height=videoPlayer.videoHeight;videoDuration.textContent=formatTime(duration);startTimeInput.max=duration;endTimeInput.max=duration;endTimeInput.value=Math.floor(duration);updateMetaField('metaDurationFull',formatDurationFull(duration));updateMetaField('metaResolution',width&&height?`${width} × ${height}`:'—');try{await initFFmpeg();const inputExt=file.name.split('.').pop().toLowerCase();const probeName=`probe.${inputExt}`;ffmpeg.FS('writeFile',probeName,await fetchFile(file));try{await ffmpeg.run('-i',probeName)}catch(e){}try{ffmpeg.FS('unlink',probeName)}catch(e){}if(!detectedFPS)updateFPSDisplay(null)}catch(error){console.warn('FPS detection failed',error);updateFPSDisplay(null)}},{once:true})}
-    function handleTrim(){const start=parseFloat(startTimeInput.value), end=parseFloat(endTimeInput.value);if(start>=0&&end>start){videoOperations.trim={start,end};showNotification('已套用裁切設定。若未加其他效果，輸出時會優先嘗試不重編碼。')}else showNotification('裁切時間設定不正確。','error')}
-    function handleResize(){const value=document.getElementById('resizeSelect').value;videoOperations.resize=value||null;showNotification(value?'已套用解析度設定。':'已恢復原始解析度。')}
-    function handleConvert(){const format=document.getElementById('formatSelect').value;videoOperations.format=format;showNotification(`輸出格式已設定為 ${format.toUpperCase()}。`)}
-    function handleMute(){videoOperations.mute=!videoOperations.mute;document.getElementById('muteBtn').textContent=videoOperations.mute?'保留音訊':'移除音訊';showNotification(videoOperations.mute?'輸出時將移除音訊。':'輸出時將保留音訊。')}
-    function buildFFmpegCommand(inputFileName, outputFileName){const targetFormat=videoOperations.format;const fastPath=shouldFastRemux(targetFormat);if(fastPath){const args=['-fflags','+genpts'];if(videoOperations.trim){args.push('-ss',String(videoOperations.trim.start));args.push('-t',String(videoOperations.trim.end-videoOperations.trim.start))}args.push('-i',inputFileName,'-c','copy',outputFileName);return args}const args=['-fflags','+genpts','-i',inputFileName];if(videoOperations.trim){args.push('-ss',String(videoOperations.trim.start));args.push('-t',String(videoOperations.trim.end-videoOperations.trim.start))}const filters=[];if(videoOperations.effect){switch(videoOperations.effect){case 'grayscale':filters.push('hue=s=0');break;case 'blur':filters.push('boxblur=5:1');break;case 'sharpen':filters.push('unsharp=5:5:1.0:5:5:0.0');break;case 'vintage':filters.push('curves=vintage');break}}if(videoOperations.resize){const [w,h]=videoOperations.resize.split('x');filters.push(`scale=${w}:${h}`)}if(filters.length)args.push('-vf',filters.join(','));if(videoOperations.mute){args.push('-an')}else if(videoOperations.volume!==100){args.push('-af',`volume=${videoOperations.volume/100}`)}if(targetFormat==='gif'){args.push('-pix_fmt','rgb24','-r','10')}else if(targetFormat==='webm'){args.push('-c:v','libvpx','-crf','10','-b:v','1M');if(!videoOperations.mute)args.push('-c:a','libvorbis')}else{args.push('-c:v','libx264','-preset','medium','-crf','23','-pix_fmt','yuv420p');if(!videoOperations.mute)args.push('-c:a','aac','-b:a','128k')}if(targetFormat==='mov')args.push('-f','mov');if(targetFormat==='avi')args.push('-f','avi');args.push(outputFileName);return args}
-    async function handleExport(){if(!currentVideoFile)return showNotification('請先上傳影片。','error');showProcessingModal();try{const isMov=isMovFile(currentVideoFile);const fastPath=shouldFastRemux(videoOperations.format);progressHint.textContent=fastPath?(videoOperations.trim?'偵測到可使用不重編碼裁切模式，速度較快，但裁切點可能不會百分之百精準。':'偵測到可使用快速模式，將只更換容器，不重新編碼。'):isMov?'MOV 在瀏覽器端重新編碼會較慢，請耐心等待。':'FFmpeg 正在瀏覽器端執行，請稍候。';updateProgress(5,'初始化 FFmpeg…');await initFFmpeg();ffmpeg.setProgress(({ratio})=>{const pct=Math.min(99,Math.max(0,Math.round(ratio*100)));updateProgress(pct,`處理中… ${pct}%`)});const inputExt=currentVideoFile.name.split('.').pop().toLowerCase();const inputFileName=`input.${inputExt}`;const outputFileName=`output.${videoOperations.format}`;updateProgress(12,'寫入原始影片…');ffmpeg.FS('writeFile',inputFileName,await fetchFile(currentVideoFile));updateProgress(24,fastPath?'建立快速處理指令…':'建立轉檔指令…');const command=buildFFmpegCommand(inputFileName,outputFileName);updateProgress(32,fastPath?'快速處理中…':'開始轉檔…');await ffmpeg.run(...command);updateProgress(92,'輸出檔案整理中…');const data=ffmpeg.FS('readFile',outputFileName);const mime=videoOperations.format==='gif'?'image/gif':`video/${videoOperations.format}`;const blob=new Blob([data.buffer],{type:mime});if(processedVideoURL)URL.revokeObjectURL(processedVideoURL);processedVideoURL=URL.createObjectURL(blob);try{ffmpeg.FS('unlink',inputFileName)}catch(e){}try{ffmpeg.FS('unlink',outputFileName)}catch(e){}updateProgress(100,'處理完成');setTimeout(()=>{hideProcessingModal();showOutput();showNotification(fastPath?(videoOperations.trim?'已使用不重編碼快速裁切完成輸出。':'已使用快速模式完成輸出。'):'影片已完成輸出。')},420)}catch(error){console.error(error);hideProcessingModal();if(error?.message?.includes('SharedArrayBuffer'))showNotification('缺少 SharedArrayBuffer 環境，請確認 Vercel 的 COOP/COEP header 設定。','error');else if(error?.message?.includes('memory'))showNotification('記憶體不足，請嘗試較小的影片檔。','error');else showNotification(`影片處理失敗：${error.message||'未知錯誤'}`,'error')}}
-    function handleReset(){videoOperations={trim:null,effect:null,resize:null,format:'mp4',mute:false,volume:100};startTimeInput.value=0;endTimeInput.value=videoPlayer.duration?Math.floor(videoPlayer.duration):'';document.getElementById('resizeSelect').value='';document.getElementById('formatSelect').value='mp4';volumeSlider.value=100;volumeValue.textContent='100%';document.getElementById('muteBtn').textContent='移除音訊';document.querySelectorAll('.effect-btn').forEach(btn=>btn.classList.remove('active'));showNotification('已重設全部設定。')}
-    function handleDownload(){if(!processedVideoURL)return;const a=document.createElement('a');a.href=processedVideoURL;a.download=`edited_video_${Date.now()}.${videoOperations.format}`;document.body.appendChild(a);a.click();document.body.removeChild(a)}
-    function handleNewVideo(){handleReset();currentVideoFile=null;if(currentVideoURL)URL.revokeObjectURL(currentVideoURL);if(processedVideoURL)URL.revokeObjectURL(processedVideoURL);currentVideoURL=null;processedVideoURL=null;videoInput.value='';resetVideoMetaPanel();document.getElementById('videoMetaPanel').style.display='none';editorSection.style.display='none';outputSection.style.display='none';uploadSection.style.display='block';videoName.textContent='—';videoDuration.textContent='—';videoPlayer.removeAttribute('src');outputVideo.removeAttribute('src');videoPlayer.load();outputVideo.load();showNotification('可以開始上傳新的影片。')}
-    function showProcessingModal(){processingModal.style.display='flex';updateProgress(0,'初始化中…');progressHint.textContent='FFmpeg 正在瀏覽器端執行，請稍候。'} function hideProcessingModal(){processingModal.style.display='none'} function updateProgress(percent,text){progressBarFill.style.width=`${percent}%`;progressText.textContent=text;progressPercent.textContent=`${percent}%`} function showOutput(){outputVideo.src=processedVideoURL;outputSection.style.display='block';editorSection.style.display='none';outputSection.scrollIntoView({behavior:'smooth',block:'start'})}
-    function showNotification(message,type='success'){const el=document.createElement('div');el.className=`notification ${type}`;el.textContent=message;document.body.appendChild(el);setTimeout(()=>{el.style.animation='slideOut .24s cubic-bezier(0.16,1,0.3,1) both';setTimeout(()=>el.remove(),250)},2600)}
-    window.addEventListener('load',()=>{if(!window.SharedArrayBuffer)setStatus('目前瀏覽器環境未完整支援 SharedArrayBuffer，請確認部署 header，建議使用 Chrome 或 Firefox。','注意','loading');autoLoadFFmpeg()});
+
+    // --- MediaInfo 初始化 ---
+    const mediaInfoPromise = MediaInfo({
+      format: 'object',
+      locateFile: file => `https://unpkg.com/mediainfo.js/dist/${file}` // 若自託管可改成 /mediainfo/${file}
+    });
+
+    let ffmpeg = null,
+        ffmpegLoaded = false,
+        currentVideoFile = null,
+        currentVideoURL = null,
+        processedVideoURL = null,
+        detectedFPS = null;
+
+    let videoOperations = {
+      trim: null,
+      effect: null,
+      resize: null,
+      format: 'mp4',
+      mute: false,
+      volume: 100
+    };
+
+    const uploadArea = document.getElementById('uploadArea'),
+          videoInput = document.getElementById('videoInput'),
+          uploadSection = document.getElementById('uploadSection'),
+          editorSection = document.getElementById('editorSection'),
+          outputSection = document.getElementById('outputSection'),
+          videoPlayer = document.getElementById('videoPlayer'),
+          outputVideo = document.getElementById('outputVideo'),
+          videoName = document.getElementById('videoName'),
+          videoDuration = document.getElementById('videoDuration'),
+          startTimeInput = document.getElementById('startTime'),
+          endTimeInput = document.getElementById('endTime'),
+          volumeSlider = document.getElementById('volumeSlider'),
+          volumeValue = document.getElementById('volumeValue'),
+          processingModal = document.getElementById('processingModal'),
+          progressBarFill = document.getElementById('progressBarFill'),
+          progressText = document.getElementById('progressText'),
+          progressPercent = document.getElementById('progressPercent'),
+          progressHint = document.getElementById('progressHint'),
+          ffmpegStatusText = document.getElementById('ffmpegStatusText'),
+          statusLabel = document.getElementById('statusLabel'),
+          statusDot = document.getElementById('statusDot');
+
+    function setStatus(text, label, type='loading') {
+      ffmpegStatusText.textContent = text;
+      statusLabel.textContent = label;
+      if (type === 'ready') {
+        statusDot.style.background = 'var(--success)';
+        statusDot.style.boxShadow = '0 0 0 4px rgba(15,143,79,.12)';
+      } else if (type === 'error') {
+        statusDot.style.background = 'var(--error)';
+        statusDot.style.boxShadow = '0 0 0 4px rgba(209,47,106,.12)';
+      } else {
+        statusDot.style.background = 'var(--warning)';
+        statusDot.style.boxShadow = '0 0 0 4px rgba(183,121,31,.12)';
+      }
+    }
+
+    function formatBytes(bytes) {
+      if (!bytes && bytes !== 0) return '—';
+      const units = ['B','KB','MB','GB','TB'];
+      let i = 0, v = bytes;
+      while (v >= 1024 && i < units.length - 1) {
+        v /= 1024; i++;
+      }
+      return `${v.toFixed(v >= 100 || i === 0 ? 0 : v >= 10 ? 1 : 2)} ${units[i]}`;
+    }
+
+    function formatTime(seconds) {
+      if (!isFinite(seconds)) return '—';
+      const m = Math.floor(seconds / 60);
+      const s = Math.floor(seconds % 60).toString().padStart(2, '0');
+      return `${m}:${s}`;
+    }
+
+    function formatDurationFull(seconds) {
+      if (!isFinite(seconds)) return '—';
+      const h = Math.floor(seconds / 3600).toString().padStart(2,'0');
+      const m = Math.floor((seconds % 3600) / 60).toString().padStart(2,'0');
+      const s = Math.floor(seconds % 60).toString().padStart(2,'0');
+      return h === '00' ? `${m}:${s}` : `${h}:${m}:${s}`;
+    }
+
+    function getExtension(filename) {
+      const parts = filename.split('.');
+      return parts.length > 1 ? parts.pop().toLowerCase() : '—';
+    }
+
+    function isMovFile(file) {
+      return !!file && (file.name.toLowerCase().endsWith('.mov') || file.type === 'video/quicktime');
+    }
+
+    function shouldFastRemux(targetFormat) {
+      return !videoOperations.effect &&
+             !videoOperations.resize &&
+             !videoOperations.mute &&
+             videoOperations.volume === 100 &&
+             ['mp4','mov'].includes(targetFormat);
+    }
+
+    function updateMetaField(id, value) {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value ?? '—';
+    }
+
+    function resetVideoMetaPanel() {
+      ['metaFormat','metaSize','metaDurationFull','metaFps','metaResolution','metaFilename'].forEach(id => updateMetaField(id,'—'));
+    }
+
+    function showVideoMetaPanel() {
+      document.getElementById('videoMetaPanel').style.display = 'block';
+    }
+
+    function updateFPSDisplay(fps) {
+      detectedFPS = fps;
+      updateMetaField('metaFps', fps ? `${fps} fps` : '—');
+    }
+
+    async function initFFmpeg() {
+      if (!ffmpeg) {
+        const baseUrl = window.location.origin;
+        const coreUrl = `${baseUrl}/ffmpeg/ffmpeg-core.js`;
+        ffmpeg = createFFmpeg({
+          log: true,
+          corePath: coreUrl
+        });
+      }
+      if (!ffmpeg.isLoaded()) {
+        await ffmpeg.load();
+        ffmpegLoaded = true;
+      }
+      return ffmpeg;
+    }
+
+    async function autoLoadFFmpeg() {
+      try {
+        setStatus('正在初始化影片處理核心，首次載入可能需要 10–30 秒。','準備中','loading');
+        uploadArea.style.opacity = '0.55';
+        uploadArea.style.pointerEvents = 'none';
+        await initFFmpeg();
+        setStatus('影片處理核心已就緒，可以開始上傳影片。','已就緒','ready');
+        uploadArea.style.opacity = '1';
+        uploadArea.style.pointerEvents = 'auto';
+      } catch (error) {
+        console.error(error);
+        setStatus('影片處理核心載入失敗，請重新整理頁面後再試一次。','載入失敗','error');
+        showNotification('FFmpeg 載入失敗，請重新整理頁面。','error');
+      }
+    }
+
+    uploadArea.addEventListener('click', () => {
+      if (!ffmpegLoaded) return showNotification('請先等待核心初始化完成。','error');
+      videoInput.click();
+    });
+
+    uploadArea.addEventListener('dragover', e => {
+      e.preventDefault();
+      uploadArea.classList.add('dragover');
+    });
+
+    uploadArea.addEventListener('dragleave', e => {
+      e.preventDefault();
+      uploadArea.classList.remove('dragover');
+    });
+
+    uploadArea.addEventListener('drop', e => {
+      e.preventDefault();
+      uploadArea.classList.remove('dragover');
+      if (!ffmpegLoaded) return showNotification('請先等待核心初始化完成。','error');
+      const file = e.dataTransfer.files?.[0];
+      if (file && file.type.startsWith('video/')) handleVideoFile(file);
+      else showNotification('請拖曳正確的影片檔。','error');
+    });
+
+    videoInput.addEventListener('change', e => {
+      const file = e.target.files?.[0];
+      if (file && file.type.startsWith('video/')) handleVideoFile(file);
+      else showNotification('請選擇正確的影片檔。','error');
+    });
+
+    document.getElementById('trimBtn').addEventListener('click', handleTrim);
+    document.getElementById('resizeBtn').addEventListener('click', handleResize);
+    document.getElementById('convertBtn').addEventListener('click', handleConvert);
+    document.getElementById('muteBtn').addEventListener('click', handleMute);
+    document.getElementById('exportBtn').addEventListener('click', handleExport);
+    document.getElementById('resetBtn').addEventListener('click', handleReset);
+    document.getElementById('downloadBtn').addEventListener('click', handleDownload);
+    document.getElementById('newVideoBtn').addEventListener('click', handleNewVideo);
+
+    volumeSlider.addEventListener('input', e => {
+      videoOperations.volume = Number(e.target.value);
+      volumeValue.textContent = `${e.target.value}%`;
+    });
+
+    document.querySelectorAll('.effect-btn').forEach(btn =>
+      btn.addEventListener('click', e => {
+        const effect = e.currentTarget.dataset.effect;
+        if (videoOperations.effect === effect) {
+          videoOperations.effect = null;
+          e.currentTarget.classList.remove('active');
+        } else {
+          document.querySelectorAll('.effect-btn').forEach(b => b.classList.remove('active'));
+          videoOperations.effect = effect;
+          e.currentTarget.classList.add('active');
+        }
+      })
+    );
+
+    // Frame-by-frame 控制
+    document.getElementById('prevFrameBtn').addEventListener('click', () => {
+      seekByFrames(-1);
+    });
+    document.getElementById('nextFrameBtn').addEventListener('click', () => {
+      seekByFrames(1);
+    });
+
+    function getFrameDuration() {
+      if (detectedFPS && detectedFPS > 0) return 1 / detectedFPS;
+      return 1 / 30; // fallback
+    }
+
+    function seekByFrames(frames) {
+      if (!videoPlayer.duration || !isFinite(videoPlayer.duration)) return;
+      const frameDuration = getFrameDuration();
+      const target = videoPlayer.currentTime + frames * frameDuration;
+      const clamped = Math.min(Math.max(target, 0), videoPlayer.duration);
+      videoPlayer.currentTime = clamped;
+    }
+
+    async function analyzeWithMediaInfo(file) {
+      try {
+        const mediaInfo = await mediaInfoPromise;
+        const getSize = () => file.size;
+        const readChunk = (size, offset) =>
+          new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            const blob = file.slice(offset, offset + size);
+            reader.onload = event => resolve(new Uint8Array(event.target.result));
+            reader.onerror = error => reject(error);
+            reader.readAsArrayBuffer(blob);
+          });
+
+        const result = await mediaInfo.analyzeData(getSize, readChunk);
+        mediaInfo.close();
+
+        const tracks = result.media?.track || [];
+        const general = tracks.find(t => t['@type'] === 'General') || {};
+        const video = tracks.find(t => t['@type'] === 'Video') || {};
+
+        return {
+          durationMs: Number(general.Duration) || Number(video.Duration) || null,
+          codec: video.Format || video.CodecID || null,
+          fps: Number(video.FrameRate) || null,
+          width: Number(video.Width) || null,
+          height: Number(video.Height) || null,
+          bitRate: Number(video.BitRate) || null
+        };
+      } catch (e) {
+        console.warn('MediaInfo analyze failed', e);
+        return {};
+      }
+    }
+
+    async function handleVideoFile(file) {
+      currentVideoFile = file;
+      detectedFPS = null;
+      resetVideoMetaPanel();
+      showVideoMetaPanel();
+
+      if (currentVideoURL) URL.revokeObjectURL(currentVideoURL);
+      currentVideoURL = URL.createObjectURL(file);
+      videoPlayer.src = currentVideoURL;
+
+      videoName.textContent = file.name;
+      videoDuration.textContent = '讀取中…';
+
+      const ext = getExtension(file.name).toUpperCase();
+      const mime = file.type || 'unknown';
+      updateMetaField('metaFilename', file.name);
+      updateMetaField('metaFormat', ext !== '—' ? `${ext} (${mime})` : mime);
+      updateMetaField('metaSize', formatBytes(file.size));
+      updateMetaField('metaFps', '—');
+
+      uploadSection.style.display = 'none';
+      outputSection.style.display = 'none';
+      editorSection.style.display = 'block';
+
+      videoPlayer.addEventListener('loadedmetadata', async () => {
+        // 1) 用 <video> 取到初步資訊
+        let duration = videoPlayer.duration;
+        let width = videoPlayer.videoWidth;
+        let height = videoPlayer.videoHeight;
+
+        videoDuration.textContent = formatTime(duration);
+        startTimeInput.max = duration;
+        endTimeInput.max = duration;
+        endTimeInput.value = Math.floor(duration);
+        updateMetaField('metaDurationFull', formatDurationFull(duration));
+        updateMetaField('metaResolution', width && height ? `${width} × ${height}` : '—');
+
+        // 2) 用 MediaInfo 取得更完整資訊
+        const info = await analyzeWithMediaInfo(file);
+
+        if (info.fps) {
+          updateFPSDisplay(info.fps);
+        } else {
+          updateFPSDisplay(null);
+        }
+
+        if (info.codec) {
+          const prev = document.getElementById('metaFormat').textContent;
+          updateMetaField('metaFormat', prev === '—' ? info.codec : `${prev} · ${info.codec}`);
+        }
+
+        if (info.width && info.height) {
+          updateMetaField('metaResolution', `${info.width} × ${info.height}`);
+        }
+
+        if (info.durationMs && !isNaN(info.durationMs)) {
+          duration = info.durationMs / 1000;
+          videoDuration.textContent = formatTime(duration);
+          startTimeInput.max = duration;
+          endTimeInput.max = duration;
+          endTimeInput.value = Math.floor(duration);
+          updateMetaField('metaDurationFull', formatDurationFull(duration));
+        }
+      }, { once: true });
+    }
+
+    function handleTrim() {
+      const start = parseFloat(startTimeInput.value);
+      const end = parseFloat(endTimeInput.value);
+      if (start >= 0 && end > start) {
+        videoOperations.trim = { start, end };
+        showNotification('已套用裁切設定。若未加其他效果，輸出時會優先嘗試不重編碼。');
+      } else {
+        showNotification('裁切時間設定不正確。','error');
+      }
+    }
+
+    function handleResize() {
+      const value = document.getElementById('resizeSelect').value;
+      videoOperations.resize = value || null;
+      showNotification(value ? '已套用解析度設定。' : '已恢復原始解析度。');
+    }
+
+    function handleConvert() {
+      const format = document.getElementById('formatSelect').value;
+      videoOperations.format = format;
+      showNotification(`輸出格式已設定為 ${format.toUpperCase()}。`);
+    }
+
+    function handleMute() {
+      videoOperations.mute = !videoOperations.mute;
+      document.getElementById('muteBtn').textContent = videoOperations.mute ? '保留音訊' : '移除音訊';
+      showNotification(videoOperations.mute ? '輸出時將移除音訊。' : '輸出時將保留音訊。');
+    }
+
+    function buildFFmpegCommand(inputFileName, outputFileName) {
+      const targetFormat = videoOperations.format;
+      const fastPath = shouldFastRemux(targetFormat);
+
+      if (fastPath) {
+        const args = ['-fflags', '+genpts'];
+        if (videoOperations.trim) {
+          args.push('-ss', String(videoOperations.trim.start));
+          args.push('-t', String(videoOperations.trim.end - videoOperations.trim.start));
+        }
+        args.push('-i', inputFileName, '-c', 'copy', outputFileName);
+        return args;
+      }
+
+      const args = ['-fflags', '+genpts', '-i', inputFileName];
+
+      if (videoOperations.trim) {
+        args.push('-ss', String(videoOperations.trim.start));
+        args.push('-t', String(videoOperations.trim.end - videoOperations.trim.start));
+      }
+
+      const filters = [];
+
+      if (videoOperations.effect) {
+        switch (videoOperations.effect) {
+          case 'grayscale':
+            filters.push('hue=s=0');
+            break;
+          case 'blur':
+            filters.push('boxblur=5:1');
+            break;
+          case 'sharpen':
+            filters.push('unsharp=5:5:1.0:5:5:0.0');
+            break;
+          case 'vintage':
+            filters.push('curves=vintage');
+            break;
+        }
+      }
+
+      if (videoOperations.resize) {
+        const [w, h] = videoOperations.resize.split('x');
+        filters.push(`scale=${w}:${h}`);
+      }
+
+      if (filters.length) {
+        args.push('-vf', filters.join(','));
+      }
+
+      if (videoOperations.mute) {
+        args.push('-an');
+      } else if (videoOperations.volume !== 100) {
+        args.push('-af', `volume=${videoOperations.volume/100}`);
+      }
+
+      if (targetFormat === 'gif') {
+        args.push('-pix_fmt', 'rgb24', '-r', '10');
+      } else if (targetFormat === 'webm') {
+        args.push('-c:v', 'libvpx', '-crf', '10', '-b:v', '1M');
+        if (!videoOperations.mute) args.push('-c:a', 'libvorbis');
+      } else {
+        args.push('-c:v', 'libx264', '-preset', 'medium', '-crf', '23', '-pix_fmt', 'yuv420p');
+        if (!videoOperations.mute) args.push('-c:a', 'aac', '-b:a', '128k');
+      }
+
+      if (targetFormat === 'mov') args.push('-f','mov');
+      if (targetFormat === 'avi') args.push('-f','avi');
+
+      args.push(outputFileName);
+      return args;
+    }
+
+    async function handleExport() {
+      if (!currentVideoFile) return showNotification('請先上傳影片。','error');
+
+      showProcessingModal();
+
+      try {
+        const isMov = isMovFile(currentVideoFile);
+        const fastPath = shouldFastRemux(videoOperations.format);
+
+        progressHint.textContent = fastPath
+          ? (videoOperations.trim
+              ? '偵測到可使用不重編碼裁切模式，速度較快，但裁切點可能不會百分之百精準。'
+              : '偵測到可使用快速模式，將只更換容器，不重新編碼。')
+          : isMov
+              ? 'MOV 在瀏覽器端重新編碼會較慢，請耐心等待。'
+              : 'FFmpeg 正在瀏覽器端執行，請稍候。';
+
+        updateProgress(5, '初始化 FFmpeg…');
+        await initFFmpeg();
+
+        ffmpeg.setProgress(({ ratio }) => {
+          const pct = Math.min(99, Math.max(0, Math.round(ratio * 100)));
+          updateProgress(pct, `處理中… ${pct}%`);
+        });
+
+        const inputExt = currentVideoFile.name.split('.').pop().toLowerCase();
+        const inputFileName = `input.${inputExt}`;
+        const outputFileName = `output.${videoOperations.format}`;
+
+        updateProgress(12, '寫入原始影片…');
+        ffmpeg.FS('writeFile', inputFileName, await fetchFile(currentVideoFile));
+
+        updateProgress(24, fastPath ? '建立快速處理指令…' : '建立轉檔指令…');
+        const command = buildFFmpegCommand(inputFileName, outputFileName);
+
+        updateProgress(32, fastPath ? '快速處理中…' : '開始轉檔…');
+        await ffmpeg.run(...command);
+
+        updateProgress(92, '輸出檔案整理中…');
+        const data = ffmpeg.FS('readFile', outputFileName);
+        const mime = videoOperations.format === 'gif'
+          ? 'image/gif'
+          : `video/${videoOperations.format}`;
+        const blob = new Blob([data.buffer], { type: mime });
+
+        if (processedVideoURL) URL.revokeObjectURL(processedVideoURL);
+        processedVideoURL = URL.createObjectURL(blob);
+
+        try { ffmpeg.FS('unlink', inputFileName); } catch(e) {}
+        try { ffmpeg.FS('unlink', outputFileName); } catch(e) {}
+
+        updateProgress(100, '處理完成');
+
+        setTimeout(() => {
+          hideProcessingModal();
+          showOutput();
+          showNotification(
+            fastPath
+              ? (videoOperations.trim
+                  ? '已使用不重編碼快速裁切完成輸出。'
+                  : '已使用快速模式完成輸出。')
+              : '影片已完成輸出。'
+          );
+        }, 420);
+      } catch (error) {
+        console.error(error);
+        hideProcessingModal();
+        if (error?.message?.includes('SharedArrayBuffer')) {
+          showNotification('缺少 SharedArrayBuffer 環境，請確認 Vercel 的 COOP/COEP header 設定。','error');
+        } else if (error?.message?.includes('memory')) {
+          showNotification('記憶體不足，請嘗試較小的影片檔。','error');
+        } else {
+          showNotification(`影片處理失敗：${error.message || '未知錯誤'}`,'error');
+        }
+      }
+    }
+
+    function handleReset() {
+      videoOperations = {
+        trim: null,
+        effect: null,
+        resize: null,
+        format: 'mp4',
+        mute: false,
+        volume: 100
+      };
+      startTimeInput.value = 0;
+      endTimeInput.value = videoPlayer.duration ? Math.floor(videoPlayer.duration) : '';
+      document.getElementById('resizeSelect').value = '';
+      document.getElementById('formatSelect').value = 'mp4';
+      volumeSlider.value = 100;
+      volumeValue.textContent = '100%';
+      document.getElementById('muteBtn').textContent = '移除音訊';
+      document.querySelectorAll('.effect-btn').forEach(btn => btn.classList.remove('active'));
+      showNotification('已重設全部設定。');
+    }
+
+    function handleDownload() {
+      if (!processedVideoURL) return;
+      const a = document.createElement('a');
+      a.href = processedVideoURL;
+      a.download = `edited_video_${Date.now()}.${videoOperations.format}`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    function handleNewVideo() {
+      handleReset();
+      currentVideoFile = null;
+      if (currentVideoURL) URL.revokeObjectURL(currentVideoURL);
+      if (processedVideoURL) URL.revokeObjectURL(processedVideoURL);
+      currentVideoURL = null;
+      processedVideoURL = null;
+      videoInput.value = '';
+      resetVideoMetaPanel();
+      document.getElementById('videoMetaPanel').style.display = 'none';
+      editorSection.style.display = 'none';
+      outputSection.style.display = 'none';
+      uploadSection.style.display = 'block';
+      videoName.textContent = '—';
+      videoDuration.textContent = '—';
+      videoPlayer.removeAttribute('src');
+      outputVideo.removeAttribute('src');
+      videoPlayer.load();
+      outputVideo.load();
+      showNotification('可以開始上傳新的影片。');
+    }
+
+    function showProcessingModal() {
+      processingModal.style.display = 'flex';
+      updateProgress(0,'初始化中…');
+      progressHint.textContent = 'FFmpeg 正在瀏覽器端執行，請稍候。';
+    }
+
+    function hideProcessingModal() {
+      processingModal.style.display = 'none';
+    }
+
+    function updateProgress(percent, text) {
+      progressBarFill.style.width = `${percent}%`;
+      progressText.textContent = text;
+      progressPercent.textContent = `${percent}%`;
+    }
+
+    function showOutput() {
+      outputVideo.src = processedVideoURL;
+      outputSection.style.display = 'block';
+      editorSection.style.display = 'none';
+      outputSection.scrollIntoView({ behavior:'smooth', block:'start' });
+    }
+
+    function showNotification(message, type='success') {
+      const el = document.createElement('div');
+      el.className = `notification ${type}`;
+      el.textContent = message;
+      document.body.appendChild(el);
+      setTimeout(() => {
+        el.style.animation = 'slideOut .24s cubic-bezier(0.16,1,0.3,1) both';
+        setTimeout(() => el.remove(), 250);
+      }, 2600);
+    }
+
+    window.addEventListener('load', () => {
+      if (!window.SharedArrayBuffer) {
+        setStatus('目前瀏覽器環境未完整支援 SharedArrayBuffer，請確認部署 header，建議使用 Chrome 或 Firefox。','注意','loading');
+      }
+      autoLoadFFmpeg();
+    });
   </script>
 </body>
 </html>
